@@ -1,0 +1,27 @@
+# This file activates when you run with: -Dspring.profiles.active=local
+# It overrides the Docker service hostnames in application.yml with localhost,
+# so Spring Boot can reach the infra containers from your Mac.
+#
+# Usage:
+#   IntelliJ:  Add -Dspring.profiles.active=local to VM options in run config
+#   Terminal:  mvn spring-boot:run -Dspring-boot.run.profiles=local
+
+debug: true
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/polypilot
+    username: ${DB_USER:polypilot}
+    password: ${DB_PASSWORD:polypilot_secret}
+  data:
+    redis:
+      host: localhost
+  rabbitmq:
+    host: localhost
+    username: ${RABBITMQ_USER:polypilot}
+    password: ${RABBITMQ_PASSWORD:polypilot_secret}
+
+
+services:
+  auth-url: http://localhost:8001   # auth-service running locally or in Docker
+  ai-url:   http://localhost:8002   # ai-agent running locally or in Docker

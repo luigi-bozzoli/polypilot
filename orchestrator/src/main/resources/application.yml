@@ -1,0 +1,51 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://postgres:5432/polypilot
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate          # Flyway owns the schema — Hibernate only validates
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        jdbc:
+          time_zone: UTC
+  flyway:
+    enabled: false
+    locations: classpath:db/migration
+    baseline-on-migrate: false      # set true only when adopting Flyway mid-project
+    validate-on-migrate: true       # always validate checksums before migrating
+    out-of-order: false             # enforce strict version ordering
+
+  data:
+    redis:
+      host: redis
+      port: 6379
+
+  rabbitmq:
+    host: ${RABBITMQ_HOST:rabbitmq}
+    port: 5672
+    username: ${RABBITMQ_USER}
+    password: ${RABBITMQ_PASSWORD}
+
+# URLs for downstream Python services
+services:
+  auth-url: ${AUTH_SERVICE_URL:http://auth-service:8001}
+  ai-url:   ${AI_AGENT_URL:http://ai-agent:8002}
+
+# Expose /actuator/health for Docker healthcheck
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
+  endpoint:
+    health:
+      show-details: always
+
+server:
+  port: 8080

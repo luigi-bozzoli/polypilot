@@ -1,0 +1,152 @@
+services:
+
+  # ── Infrastructure ────────────────────────────────────────────────────────
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: polypilot
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d polypilot"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - polypilot-net
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    networks:
+      - polypilot-net
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
+    ports:
+      - "5672:5672"
+      - "15672:15672"   # management UI → http://localhost:15672
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - polypilot-net
+
+  # ── Python services ───────────────────────────────────────────────────────
+
+  auth-service:
+    build: ./auth-service
+    ports:
+      - "8001:8001"
+    environment:
+      POLYMARKET_PRIVATE_KEY: ${POLYMARKET_PRIVATE_KEY}
+    volumes:
+      - ./auth-service:/app          # hot reload — code changes apply immediately
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - polypilot-net
+
+  ai-agent:
+    build: ./ai-agent
+    ports:
+      - "8002:8002"
+    environment:
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_USER: ${RABBITMQ_USER}
+      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
+    volumes:
+      - ./ai-agent:/app              # hot reload
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8002/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - polypilot-net
+
+  # ── Java orchestrator ─────────────────────────────────────────────────────
+
+  orchestrator:
+    build: ./orchestrator
+    ports:
+      - "8080:8080"
+    environment:
+      DB_HOST: postgres          # ← must match the service name exactly
+      DB_PORT: 5432
+      DB_NAME: polypilot
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      REDIS_HOST: redis          # ← same issue would hit Redis later
+      REDIS_PORT: 6379
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_USER: ${RABBITMQ_USER}
+      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
+      AUTH_SERVICE_URL: http://auth-service:8001
+      AI_AGENT_URL: http://ai-agent:8002
+      POLYPILOT_LIVE_MODE: false
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      auth-service:
+        condition: service_healthy
+      ai-agent:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 120s             # JVM + Spring Boot needs time on first boot
+    networks:
+      - polypilot-net
+
+  # ── React dashboard ───────────────────────────────────────────────────────
+
+  dashboard:
+    build: ./dashboard
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./dashboard:/app
+      - /app/node_modules            # keep container's node_modules, don't overwrite
+    depends_on:
+      orchestrator:
+        condition: service_healthy
+    networks:
+      - polypilot-net
+
+volumes:
+  postgres_data:
+
+networks:
+  polypilot-net:
+    driver: bridge
