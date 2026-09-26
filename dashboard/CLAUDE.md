@@ -48,7 +48,33 @@ Standalone: `npm install && npm run dev` (serves on 5173).
 
 - `npm run build` — runs `tsc` (noEmit type-check) then `vite build`
 - `npm run preview` — preview a production build
-- No lint config and no test runner are set up yet.
+- No lint config and no test runner are set up yet (the demo build has its own Playwright suite —
+  see "Demo mode" below).
+
+## Demo mode
+
+A `VITE_DEMO=true` build (`--mode demo`) runs with no backend: every `/api/*` call is answered in-browser by
+[MSW](https://mswjs.io/) from `src/demo/`. See `src/demo/README.md` for the full endpoint inventory and design,
+and the root README's [Live demo](../README.md#live-demo) section for what's simulated. Summary of the rules:
+
+- Commands: `npm run dev:demo` (5173, demo mode), `npm run build:demo` (→ `dist/`, plus a `404.html` copy for
+  GitHub Pages SPA fallback), `npm run preview:demo`, `npm run test:e2e` (builds demo, then runs the Playwright
+  crawl in `e2e/`). All accept `BASE_PATH=/x/` for a non-root deploy path.
+- **Real code imports nothing from `src/demo` except the `main.tsx` bootstrap** (a dynamic `import('./demo/start')`
+  gated on `import.meta.env.VITE_DEMO === 'true'`, so Vite dead-code-eliminates it from real builds). A handful of
+  real modules (the wallet login panel, the password form, `wagmiConfig.ts`) are swapped for demo-only
+  replacements via `vite.config.ts`'s `resolve.alias`, active only in demo mode — the real files themselves are
+  untouched and still ship as-is in `npm run build`.
+- `scripts/check-bundle.mjs` enforces the split: it fails if a real `dist/` (`build` / `npm run build`) contains
+  the demo marker or MSW's `mockServiceWorker.js`, and fails if a demo `dist/` (`build:demo`) is missing either.
+  Wired into `ci.yml` (real build) and `demo.yml` (demo build).
+- **When you add or change any API call** (`src/features/*/*.ts`), **update the inventory table in
+  `src/demo/README.md`, its fixture (`src/demo/fixtures/`) and its handler (`src/demo/handlers/`) in the same
+  change** — the Playwright crawl test fails loudly on any unmocked `/api/*` request (`handlers/index.ts`'s
+  catch-all returns 501 and logs `[demo] UNMOCKED`), so a gap doesn't go unnoticed, but it also doesn't fix
+  itself.
+- Strategies are the only stateful demo domain (`src/demo/db.ts`, an in-memory `Map` that resets on every page
+  load); everything else is static fixture data.
 
 ## Architecture notes
 

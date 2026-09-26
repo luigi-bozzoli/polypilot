@@ -35,6 +35,9 @@ Each service that has grown enough to need it has its own `CLAUDE.md` — `orche
 `auth-service/CLAUDE.md`, `ai-agent/CLAUDE.md`, `dashboard/CLAUDE.md` — with the architecture, conventions, and
 gotchas specific to it. This file covers only what's shared across the monorepo.
 
+The dashboard also has a backend-less **demo build** (GitHub Pages, no orchestrator/auth-service/ai-agent
+involved) — see `dashboard/CLAUDE.md`'s "Demo mode" section and `dashboard/src/demo/README.md`.
+
 `ai-agent` is still a **stub**: only `/health` is implemented, `POST /ai/analyze` returns
 `{"detail": "not implemented yet"}` until the LangGraph pipeline (Phase 4) lands. `auth-service` is no longer a
 stub for read-side auth — SIWE signature recovery is live. The ClobAuth relay is implemented but

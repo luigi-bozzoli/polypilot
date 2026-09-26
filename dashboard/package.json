@@ -7,7 +7,11 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "dev:demo": "vite --mode demo",
+    "build:demo": "tsc && vite build --mode demo && node scripts/postbuild-demo.mjs",
+    "preview:demo": "vite preview --mode demo",
+    "test:e2e": "npm run build:demo && playwright test"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.102.8",
@@ -20,10 +24,12 @@
     "wagmi": "^3.7.7"
   },
   "devDependencies": {
+    "@playwright/test": "^1.63.0",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.4",
     "autoprefixer": "^10.4.20",
+    "msw": "^2.15.0",
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.15",
     "typescript": "^5.6.3",

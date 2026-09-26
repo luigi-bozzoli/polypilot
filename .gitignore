@@ -6,6 +6,7 @@
 .env
 .env.*
 !.env.example
+!dashboard/.env.demo
 
 # ── Java / Spring Boot ─────────────────────────────────────────────────────────
 target/
@@ -56,6 +57,11 @@ dist-ssr/
 .next/
 .nuxt/
 .output/
+
+# ── Playwright (dashboard/e2e) ──────────────────────────────────────────────────
+playwright-report/
+test-results/
+blob-report/
 .turbo/
 npm-debug.log*
 yarn-debug.log*

@@ -14,6 +14,37 @@ a real execution could achieve — slippage, latency, and partial fills don't ex
 
 <!-- TODO(owner): screenshots of the dashboard (overview, strategy detail, health page) -->
 
+## Live demo
+
+<!-- TODO(owner): https://<user>.github.io/<repo>/ -->
+
+A static build of the dashboard with **no backend at all** — every API call is answered in-browser by
+[MSW](https://mswjs.io/) from typed fixtures, deployed to GitHub Pages from `main` (`.github/workflows/demo.yml`).
+
+- **All data is simulated** — fixture series/markets/orders/positions/audit logs, deterministic and re-generated
+  fresh on every load. Values aren't meant to be realistic, just internally consistent.
+- **Both logins are simulated** — the password form accepts any input, and "Connect Wallet" fakes a wallet
+  connection and signature; no real wallet, extension, or network call is involved either way.
+- **Strategies are the one stateful piece** — create, edit, delete and enable/disable all work, in memory,
+  and reset to the 3 seeded strategies on reload. Nothing else is stateful.
+- **Not simulated**: placing a live order, closing a position, and enabling live trading stay permanently
+  disabled — same as in the real app, since that Polymarket integration is deprecated/frozen (see
+  [Known limitations](#known-limitations)).
+
+Run it locally:
+
+```bash
+cd dashboard
+npm run dev:demo                        # http://localhost:5173, demo mode, base path '/'
+BASE_PATH=/polypilot/ npm run build:demo && npm run preview:demo -- --port 4173 --strictPort
+```
+
+How it works: a `VITE_DEMO=true` build (`vite --mode demo` / `vite build --mode demo`) swaps a handful of
+real modules (the wallet login panel, the password form, the wagmi config) for demo-only replacements via
+`vite.config.ts`'s `resolve.alias`, and boots an MSW browser worker from `src/main.tsx` before the first
+render. None of this reaches a real build: `scripts/check-bundle.mjs` fails CI if the demo marker or MSW's
+worker script ever leaks into `dist/` from `npm run build`. Full details: `dashboard/src/demo/README.md`.
+
 ## Features
 
 All of the below is implemented and exercised by the test suite, not aspirational:
@@ -191,6 +222,9 @@ except the orchestrator's integration suite, which needs Docker.
   running more than one orchestrator instance.
 - **No multi-tenancy or billing** — every user shares the same market/indicator data; strategies and positions
   are the only per-user-scoped resources.
+- **The GitHub Pages [live demo](#live-demo) has no backend at all** — its data and both login methods are
+  simulated by MSW from static fixtures; only strategy create/edit/delete/enable is stateful, and it resets on
+  reload. See `dashboard/src/demo/README.md`.
 
 ## License
 
