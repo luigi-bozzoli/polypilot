@@ -24,9 +24,9 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Round-trips every {@link StrategyNode} discriminator through the wire format
- * {@code create-strategy-api-contracts.md} defines, and pins the exact property names the
- * frontend (`dashboard/src/features/strategies/types.ts`) expects.
+ * Round-trips every {@link StrategyNode} discriminator through {@link StrategyNodeSerializer}'s
+ * wire format, and pins the exact property names the frontend
+ * (`dashboard/src/features/strategies/types.ts`) expects.
  */
 class StrategyNodeJsonTest {
 

@@ -99,13 +99,10 @@ public class JwtService {
         return UUID.fromString(parseClaims(token).getSubject());
     }
 
-
-    // JwtService
     public String extractRole(String token) {
         return parseClaims(token).get(CLAIM_ROLE, String.class);
     }
 
-    // JwtFilter
     // ── Private helpers ───────────────────────────────────────────────────────
 
     private Claims parseClaims(String token) {

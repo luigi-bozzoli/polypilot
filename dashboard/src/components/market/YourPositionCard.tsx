@@ -1,22 +1,5 @@
 import { Card, NoDataNote, SectionLabel, SkeletonBar } from './primitives'
 
-/**
- * "Your position" (mock `13-market-detail.html`).
- *
- * SKELETON — no backend yet. `positions` is never written (trading not wired)
- * and there is no read endpoint. See `contracts/market-position.md` for the
- * proposed `GET /api/market/{marketId}/position` shape (`MarketPosition` in
- * `features/market/types.ts`).
- *
- * TODO(integration):
- *   - add `features/market/marketApi.ts#fetchMarketPosition` +
- *     `useMarketPosition(marketId)` (react-query, 204 → undefined = flat)
- *   - replace placeholders: side / size / avg_entry_price / unrealized_pnl
- *     (green when >= 0, red when < 0)
- *   - when flat (204), show a "no position" `Empty` and hide "Close position"
- *   - enable "Close position" once the close-position route
- *     (mock `07-close-position.html`) exists; disabled for now
- */
 
 const KV_ROWS = ['side', 'size', 'avg_entry_price', 'unrealized_pnl'] as const
 

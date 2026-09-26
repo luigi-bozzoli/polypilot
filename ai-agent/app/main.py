@@ -1,8 +1,7 @@
 """PolyPilot ai-agent — application factory.
 
-News fetch → summarize → sentiment score, published to RabbitMQ. Only ``/health``
-is implemented today; the LangGraph pipeline behind ``/ai/analyze`` is Phase 4.
-See ``CLAUDE.md``.
+News fetch → summarize → sentiment score, published to RabbitMQ. Both
+``/health`` and ``/ai/analyze`` are implemented; see ``CLAUDE.md``.
 """
 
 from __future__ import annotations

@@ -28,18 +28,20 @@ Code is feature-sliced, mirroring the orchestrator's own newer style:
 
 ## `mocks/`
 
-`mocks/` holds static, standalone HTML/CSS mockups (dark theme, IBM Plex Mono + DM Sans), numbered `01`–`23`.
-Some now describe screens already built for real in `src/pages/` (`09-login`, `10-overview`, `11`/`12-series-*`,
-`13-market-detail`, `14`/`15-strategy(-detail)`, `21-health`) — treat those as historical design references, not
-current specs; the live component is the source of truth once a screen ships. The rest are still ahead of the
-code (market-filter, notifications, audit-log, scheduler, alerts, settings) — for those, the mock file's CSS
-custom properties and layout are still the intended visual spec when the real screen gets built.
+`mocks/` holds static, standalone HTML/CSS mockups (dark theme, IBM Plex Mono + DM Sans), numbered `01`–`23`
+(with gaps — see below). Some now describe screens already built for real in `src/pages/` (`09-login`,
+`10-overview`, `11`/`12-series-*`, `13-market-detail`, `14`/`15-strategy(-detail)`, `21-health`) — treat those
+as historical design references, not current specs; the live component is the source of truth once a screen
+ships. The rest are still ahead of the code (market-filter, notifications, audit-log, scheduler, alerts,
+settings) — for those, the mock file's CSS custom properties and layout are still the intended visual spec
+when the real screen gets built.
 
-**place-order, confirm-live-trading, close-position/positions-list, orders-list, order-detail —
-DEPRECATED/FROZEN**: these mocks describe UI for placing/closing orders and viewing live positions, which
-depends on the order-placement pipeline (`orchestrator`'s strategy→order wiring, `auth-service`'s ClobAuth
-relay) that is deprecated/frozen under the repo's Polymarket API policy (root `CLAUDE.md`) because it sends
-data to Polymarket. Do not build real screens from these mocks.
+**place-order, confirm-live-trading, close-position, positions-list, orders-list, order-detail mocks (former
+`02`, `04`, `07`, `16`, `17`, `18`) were deleted**: they described UI for placing/closing orders and viewing
+live positions, which depends on the order-placement pipeline (`orchestrator`'s strategy→order wiring,
+`auth-service`'s ClobAuth relay) that is deprecated/frozen under the repo's Polymarket API policy (root
+`CLAUDE.md`) because it sends data to Polymarket. Do not build real screens for this functionality, and don't
+recreate these mocks while the policy stands.
 
 ## Running
 

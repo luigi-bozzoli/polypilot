@@ -1,7 +1,8 @@
-"""Phase 2 endpoints that are declared but not implemented yet.
+"""Pins the deliberately-stubbed contract of the frozen order-placement endpoints
+(see repo-root CLAUDE.md's Polymarket API policy and auth-service/CLAUDE.md).
 
-Kept so the public surface (paths, 200 + ``{"detail": "not implemented yet"}``)
-is stable for callers until the real implementations land.
+These must keep returning 200 "not implemented yet" — do not build them out
+further.
 """
 
 from __future__ import annotations
@@ -17,11 +18,11 @@ _NOT_IMPLEMENTED = NotImplementedResponse(detail="not implemented yet")
 
 @router.post("/sign-order", response_model=NotImplementedResponse)
 def sign_order() -> NotImplementedResponse:
-    """Phase 2: return an EIP-712 signed order payload for the Polymarket CLOB."""
+    """Deprecated/frozen — signs orders for the Polymarket CLOB. Do not implement further; see CLAUDE.md."""
     return _NOT_IMPLEMENTED
 
 
 @router.post("/credentials", response_model=NotImplementedResponse)
 def get_credentials() -> NotImplementedResponse:
-    """Phase 2: derive L2 API key + secret from the L1 wallet private key."""
+    """Deprecated/frozen — derives L2 API key + secret from the L1 wallet private key. Do not implement further; see CLAUDE.md."""
     return _NOT_IMPLEMENTED

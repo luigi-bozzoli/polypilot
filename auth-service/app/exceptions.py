@@ -61,8 +61,6 @@ class UpstreamRejectedError(ServiceError):
 
 
 def install_exception_handlers(app: FastAPI) -> None:
-    """Register the :class:`ServiceError` handler on ``app``."""
-
     @app.exception_handler(ServiceError)
     async def _handle_service_error(request: Request, exc: ServiceError) -> JSONResponse:
         if exc.status_code >= 500:

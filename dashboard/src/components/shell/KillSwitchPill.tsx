@@ -1,23 +1,3 @@
-/**
- * Live-mode kill switch — lateral menu footer (mock `.killswitch`).
- *
- * API-DEPENDENT — rendered as an inert placeholder for now.
- *
- * Data it will receive once an endpoint exists:
- *   - global trading mode. Expected contract:
- *       GET /api/settings            → { liveMode: boolean }   // false = dry-run
- *     (the orchestrator owns POLYPILOT_LIVE_MODE; no read endpoint yet.)
- *   - the caller's role is already available via `useAuth().session.role` and
- *     decides whether the "go live" action is offered at all.
- *
- * Behaviour to implement when wired:
- *   - dry-run  → yellow pill "DRY-RUN — go live", links to the live-trading
- *                confirm screen (mock 04-confirm-live-trading.html).
- *   - live     → red pill "LIVE — trading enabled", links to a revert confirm.
- *   - poll or subscribe so a mode change made elsewhere is reflected here.
- *
- * No fabricated mode is shown until the read endpoint is real.
- */
 export function KillSwitchPill() {
   return (
     <div

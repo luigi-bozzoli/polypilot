@@ -4,6 +4,10 @@ Relays an already-signed EIP-712 ClobAuth message to Polymarket's L1 auth
 endpoint (``/auth/api-key``) and returns the derived L2 API credentials.
 Polymarket verifies the signature itself; this service holds no private key for
 this flow.
+
+Deprecated/frozen — see repo-root CLAUDE.md's Polymarket API policy. Do not
+extend, add new callers, or build functionality on top of the credentials this
+derives.
 """
 
 from __future__ import annotations

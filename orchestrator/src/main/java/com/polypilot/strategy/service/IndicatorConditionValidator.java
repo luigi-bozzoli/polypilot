@@ -13,10 +13,9 @@ import java.util.Map;
 /**
  * Validates one {@code INDICATOR} rule-tree leaf against {@link IndicatorCatalogService}'s
  * catalog — the {@code INDICATOR} counterpart to {@link MarketFieldConditionValidator}, backing
- * {@code POST /strategies}'s rule-tree validation (per
- * {@code create-strategy-api-contracts.md}: the indicator must exist, every required parameter
- * must be supplied, and {@code outputField} must be real). Deliberately stays at those three
- * checks — it does not validate supplied parameter values against each parameter's
+ * {@code POST /strategies}'s rule-tree validation: the indicator must exist, every required
+ * parameter must be supplied, and {@code outputField} must be real. Deliberately stays at those
+ * three checks — it does not validate supplied parameter values against each parameter's
  * {@code allowedValues}/{@code constraints}, unlike {@code IndicatorCalculationService}'s own
  * {@code resolveParams}, which resolves values for actual computation rather than structural
  * validation at creation time.

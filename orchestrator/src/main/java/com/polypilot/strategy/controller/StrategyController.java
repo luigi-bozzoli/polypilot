@@ -29,10 +29,11 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Read-only strategy endpoints. Public path is {@code /api/strategies}; the dashboard's Vite
- * proxy strips the {@code /api} prefix, same as the market/indicator controllers. Behind the
- * default auth filter — any valid token. Contract for {@code /condition-fields}:
- * {@code create-strategy-api-contracts.md}.
+ * Strategy endpoints — full CRUD ({@code GET /condition-fields}, {@code GET}/{@code GET /{id}}/
+ * {@code POST}/{@code PUT /{id}}/{@code PUT /{id}/enabled}/{@code DELETE /{id}}), scoped by
+ * {@code @AuthenticationPrincipal UUID userId}. Public path is {@code /api/strategies}; the
+ * dashboard's Vite proxy strips the {@code /api} prefix, same as the market/indicator
+ * controllers. Rule-tree wire format: {@link com.polypilot.strategy.json.StrategyNodeSerializer}.
  */
 @RestController
 @RequestMapping("/strategies")

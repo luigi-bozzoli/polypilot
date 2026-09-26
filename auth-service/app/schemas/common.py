@@ -6,6 +6,8 @@ from pydantic import BaseModel
 
 
 class NotImplementedResponse(BaseModel):
-    """Body returned by endpoints that are declared but not built yet."""
+    """Body returned by the deprecated/frozen ``/auth/sign-order`` and
+    ``/auth/credentials`` stubs (see CLAUDE.md) — these are permanently
+    stubbed, not pending implementation."""
 
     detail: str

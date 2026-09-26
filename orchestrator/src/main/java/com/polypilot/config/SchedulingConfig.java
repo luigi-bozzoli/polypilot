@@ -15,8 +15,6 @@ public class SchedulingConfig {
     @Bean
     public ThreadPoolTaskScheduler taskScheduler() {
         ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
-        // series-sync, open-market-sync, ohlc-sync — one thread each so a long
-        // run of one job can't delay the others.
         scheduler.setPoolSize(3);
         scheduler.setThreadNamePrefix("market-sync-");
         scheduler.initialize();

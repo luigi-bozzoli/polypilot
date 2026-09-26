@@ -12,10 +12,9 @@ import org.springframework.web.server.ResponseStatusException;
 /**
  * Validates one {@code MARKET_FIELD} rule-tree leaf against the {@link MarketFieldCatalogService}
  * catalog — split out of any particular controller so the eventual {@code POST /strategies}
- * request-validation layer can reuse it as-is (per {@code create-strategy-api-contracts.md}'s
- * rule-tree validation rules), without this task inventing that endpoint.
+ * request-validation layer can reuse it as-is, without this task inventing that endpoint.
  *
- * <p>Every failure is a {@code 422 Unprocessable Entity}, per the contract, using the same
+ * <p>Every failure is a {@code 422 Unprocessable Entity}, using the same
  * {@link ResponseStatusException} + {@link HttpStatus#UNPROCESSABLE_CONTENT} convention already
  * used for indicator-calculation failures in {@code IndicatorCalculationService}.
  */

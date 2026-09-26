@@ -16,9 +16,8 @@ to Polymarket — placing/cancelling orders, or deriving L2 trading credentials 
 Polymarket integration may be added anywhere in this repo. Where this file previously described "(eventually)
 places orders" as a goal, that goal is on hold under this policy.
 
-The project is mid-build. `docs/polypilot-todo.md` is the authoritative roadmap (Epic → Feature → Task);
-`docs/POLYMARKET_API_GUIDE.md` documents the three Polymarket APIs and which service owns each call.
-Note `/docs` is gitignored, so those files are local-only.
+The project is mid-build. `/docs` is gitignored, so any local planning notes (roadmap, API guides) live there
+and aren't checked into this repo.
 
 ## Services
 
@@ -38,9 +37,9 @@ gotchas specific to it. This file covers only what's shared across the monorepo.
 The dashboard also has a backend-less **demo build** (GitHub Pages, no orchestrator/auth-service/ai-agent
 involved) — see `dashboard/CLAUDE.md`'s "Demo mode" section and `dashboard/src/demo/README.md`.
 
-`ai-agent` is still a **stub**: only `/health` is implemented, `POST /ai/analyze` returns
-`{"detail": "not implemented yet"}` until the LangGraph pipeline (Phase 4) lands. `auth-service` is no longer a
-stub for read-side auth — SIWE signature recovery is live. The ClobAuth relay is implemented but
+`ai-agent` is no longer a stub: `POST /ai/analyze` runs the full news → summarize/score → publish pipeline
+(GDELT fetch, one Claude call, RabbitMQ publish), not just `/health`. `auth-service` is no longer a stub for
+read-side auth either — SIWE signature recovery is live. The ClobAuth relay is implemented but
 **deprecated/frozen** under the Polymarket read-only policy above (it sends a signed message to Polymarket to
 derive trading credentials); `/auth/sign-order` and `/auth/credentials` remain stubbed and, under this policy,
 should not be implemented — they exist only to round out the now-frozen order-placement pipeline.
@@ -54,8 +53,8 @@ copies in both services (per-service Docker build contexts rule out a shared pac
 in sync. Each service's own `CLAUDE.md` has the details.
 
 `contracts/` documents API contracts the dashboard's mocks/components expect from the orchestrator, including
-ones not implemented yet (e.g. `GET /api/health/checks`) — check there before assuming a frontend-consumed
-endpoint exists.
+some the orchestrator doesn't implement yet — check there before assuming a frontend-consumed endpoint exists,
+rather than trusting any specific example to stay current.
 
 ## Running
 
@@ -74,8 +73,9 @@ Set both, or Compose will substitute empty strings and Postgres will refuse to s
 
 Verify the stack is up with `GET localhost:8080/actuator/health` (the Docker healthcheck, unauthenticated). The
 orchestrator's own `GET /health` also fans out to both Python services and reports their status inline, but —
-unlike `/actuator/health` — it requires a valid JWT (`SecurityConfig` only permits `/api/auth/**`,
-`/actuator/health`, `/error`); log in first and pass the token to check it. RabbitMQ management UI is at
+unlike `/actuator/health` — it requires a valid JWT (`SecurityConfig` permits only `/api/auth/login`,
+`/api/auth/siwe/nonce`, `/api/auth/siwe/verify`, `/actuator/health`, and `/error` — `GET /health` itself is
+deliberately not in that list); log in first and pass the token to check it. RabbitMQ management UI is at
 localhost:15672.
 
 Hot reload: the Python services and dashboard are bind-mounted (uvicorn `--reload`, Vite HMR), so edits apply
@@ -117,4 +117,4 @@ Order-critical calls are synchronous HTTP (`RestClient`) because the caller can'
 this pattern is documented for when the (currently deprecated/frozen, see the Polymarket API policy above)
 order-placement path resumes; it is not yet wired up to Polymarket. AI sentiment is fire-and-forget over
 RabbitMQ (`ai.signals`) — the orchestrator triggers `POST /ai/analyze` and picks up the result from the queue
-later. This split is deliberate (ADR-003 in the roadmap); keep new code on the correct side of it.
+later. This split is deliberate (ADR-003); keep new code on the correct side of it.

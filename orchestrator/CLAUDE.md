@@ -61,9 +61,10 @@ Both paths issue the same JWT (`JwtService.generate`). **The JWT principal is th
 userId` (`WalletController`, `StrategyController`) and `hasRole("ADMIN")`/`@PreAuthorize` rely on. Sessions are
 `STATELESS`, CSRF is off.
 
-`SecurityConfig`'s permit-all list is exactly `/api/auth/**`, `/actuator/health`, `/error` — **the custom
-`GET /health` is deliberately *not* in that list**, so it requires a valid JWT like everything else under
-`anyRequest().authenticated()`.
+`SecurityConfig`'s permit-all list is an explicit route set — `/api/auth/login`, `/api/auth/siwe/nonce`,
+`/api/auth/siwe/verify`, `/actuator/health`, `/error` — deliberately not a `/api/auth/**` wildcard, so
+`GET /api/auth/me` still requires a valid JWT like everything else under `anyRequest().authenticated()`. **The
+custom `GET /health` is likewise not in that list**, so it too requires a valid JWT.
 
 **Wallet connection (`wallet/`) — DEPRECATED/FROZEN.** Under the repo's Polymarket API policy (root `CLAUDE.md`),
 this pipeline is deprecated/frozen: it exists only to derive Polymarket L2 trading credentials via
@@ -244,8 +245,7 @@ Validation is split by concern under `strategy/service/`: `RuleTreeValidator` (s
 `MarketFieldConditionValidator`, `StrategyRequestValidator`. `RuleTreeMapper` handles the JSON tree ↔ entity
 column; `StrategyViewMapper` handles entity → `StrategyView`. `StrategyController` (`/strategies`) is full CRUD
 (`GET /condition-fields`, `GET`/`GET /{id}`/`POST`/`PUT /{id}`/`PUT /{id}/enabled`/`DELETE /{id}`) scoped by
-`@AuthenticationPrincipal UUID userId` — don't trust its class-level Javadoc, which still says "read-only" from
-before create/update/delete were added.
+`@AuthenticationPrincipal UUID userId`; its class-level Javadoc matches this (CRUD, not read-only).
 
 ### `strategy/scheduler/` — per-strategy cron evaluation
 
@@ -277,7 +277,7 @@ per-row (default `0 */5 * * * *`), so each enabled strategy gets its own indepen
   state is never trusted at fire-time.
   On a parseable tree, calls `StrategyEvaluationService.evaluate` and writes one `audit_logs` row
   (`action=STRATEGY_EVALUATED`) regardless of outcome — success, a rule-tree parse failure, or an evaluation
-  exception all get a row, matching the roadmap's "one entry per run" rule *for evaluation itself*.
+  exception all get a row: "one entry per run" for evaluation itself, by design.
   - **Since `docs/open_trades.md` landed, a `true` result writes a second row.** When `evaluate(...)` returns
     `true`, `runEvaluation` additionally calls `OpenTradeService.openTrade(strategy, marketId)` (`trading/`
     package, `marketId` the same series-resolved id used for evaluation) to
@@ -373,8 +373,8 @@ Wires `ai-agent`'s news/sentiment pipeline into the orchestrator's DB and dashbo
 
 Order-critical calls are synchronous HTTP (`RestClient`) because the caller can't proceed without the result.
 AI sentiment is fire-and-forget over RabbitMQ (`ai.signals`) — the orchestrator triggers `POST /ai/analyze` and
-picks up the result from the queue later (see **`ai/`** above). This split is deliberate (ADR-003 in the
-roadmap); keep new code on the correct side of it.
+picks up the result from the queue later (see **`ai/`** above). This split is deliberate (ADR-003); keep new
+code on the correct side of it.
 
 ## Conventions
 

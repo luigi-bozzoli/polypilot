@@ -1,26 +1,4 @@
-/**
- * Frontend contracts for the Market Detail page (`pages/MarketDetailPage.tsx`,
- * mock `dashboard/mocks/13-market-detail.html`).
- *
- * MarketPriceHistory, MarketOhlcHistory and MarketOrdersResponse are implemented; the rest below
- * are not yet. Each type mirrors a contract documented under the repo-root `contracts/` directory
- * (same convention as the `contracts/health-*.md` files consumed by `components/health/`):
- *
- *   - MarketPriceHistory  → contracts/market-price-history.md
- *   - MarketOhlcHistory    → contracts/market-ohlc.md
- *   - MarketOrdersResponse → contracts/market-recent-orders.md
- *   - MarketSentiment      → contracts/market-sentiment.md
- *   - MarketNewsSummary    → contracts/market-news-summary.md
- *   - MarketPosition       → contracts/market-position.md
- *   - MarketDecisionsResponse → contracts/market-engine-decisions.md
- *
- * The header / price / metrics of the page reuse the existing `MarketView`
- * (`features/series/types.ts`) via `useSeriesDetail` — no new type for those.
- *
- * TODO: when the orchestrator exposes these, add `features/market/marketApi.ts`
- * + react-query hooks (mirror `features/series/useSeriesQueries.ts`) and delete
- * the skeleton bodies in `components/market/*`.
- */
+
 
 import type { OrderStatus, TokenSide } from '../strategies/types'
 

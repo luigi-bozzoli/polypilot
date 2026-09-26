@@ -33,7 +33,6 @@ export function SideNav() {
           </span>
           <span className="leading-tight">
             <span className="block text-[14px] font-medium text-text-primary">PolyPilot</span>
-            {/* Static label. Wire to a real env/version once an app-config endpoint exists. */}
             <span className="block font-mono text-[9px] text-text-muted">dry-run</span>
           </span>
         </div>

@@ -2,7 +2,8 @@
  * Frontend contracts for the Create Strategy flow (`pages/StrategiesListPage.tsx`,
  * `components/strategies/*`, mock `dashboard/mocks/01-create-strategy.html`).
  *
- * Mirrors `scratchpad_shared/create-strategy-api-contracts.md` field-for-field so
+ * Mirrors the orchestrator's rule-tree wire format field-for-field (see
+ * `StrategyNodeSerializer`/`StrategyNodeJsonTest` on the orchestrator side) so
  * mock data here is drop-in replaceable with real responses once
  * `GET /strategies/condition-fields` and `POST /strategies` exist. Neither
  * endpoint is called yet — see `strategiesApi.ts`.

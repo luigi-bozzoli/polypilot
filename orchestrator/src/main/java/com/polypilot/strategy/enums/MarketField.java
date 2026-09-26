@@ -6,8 +6,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * A static field on {@code markets}/{@code sentiment_scores} that a strategy's
  * {@link com.polypilot.strategy.MarketFieldCompareNode} can compare against —
  * as opposed to a computed technical indicator. Wire values (the {@code @JsonProperty}
- * on each constant) match the {@code field} values in
- * {@code create-strategy-api-contracts.md}'s rule-tree contract exactly.
+ * on each constant) match the {@code field} values the rule-tree wire format expects —
+ * see {@code StrategyNodeSerializer}.
  */
 public enum MarketField {
     @JsonProperty("up_price") UP_PRICE,

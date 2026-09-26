@@ -18,12 +18,7 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.function.Function;
 
-/**
- * Read-side aggregation backing the Overview stat row. Pure fan-in over {@link
- * PositionRepository}/{@link OrderRepository} — no "equity" figure, since nothing in the schema
- * stores a starting-capital baseline (see {@code docs/polypilot-todo.md}); only what {@code
- * positions}/{@code orders} can actually support is exposed.
- */
+
 @Service
 @RequiredArgsConstructor
 public class PortfolioSummaryService {

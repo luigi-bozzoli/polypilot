@@ -30,7 +30,6 @@ class AnalyzeService:
     def analyze(
         self, request: AnalyzeRequest, background_tasks: BackgroundTasks
     ) -> AnalyzeAccepted:
-        """Kick off the pipeline for ``request.market_id`` and return immediately."""
         background_tasks.add_task(self._run_pipeline, request)
         return AnalyzeAccepted(detail="analysis started", market_id=request.market_id)
 

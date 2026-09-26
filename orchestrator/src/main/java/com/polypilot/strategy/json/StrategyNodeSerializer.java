@@ -15,9 +15,9 @@ import tools.jackson.databind.SerializationContext;
 import tools.jackson.databind.ValueSerializer;
 
 /**
- * Writes a {@link StrategyNode} tree in the wire format {@code create-strategy-api-contracts.md}
- * defines: a discriminated {@code "type"} property (@{code BOOLEAN}/{@code UNARY_BOOLEAN}/
- * {@code INDICATOR}/{@code MARKET_FIELD}) on an otherwise flat object.
+ * Writes a {@link StrategyNode} tree in this rule-tree's wire format: a discriminated
+ * {@code "type"} property (@{code BOOLEAN}/{@code UNARY_BOOLEAN}/{@code INDICATOR}/
+ * {@code MARKET_FIELD}) on an otherwise flat object.
  *
  * <p>Fully manual rather than {@code @JsonTypeInfo}: {@link CompareNode} and
  * {@link MarketFieldCompareNode}'s wire shape doesn't match their Java field names 1:1 (the
