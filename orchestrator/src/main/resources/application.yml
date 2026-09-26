@@ -1,0 +1,115 @@
+spring:
+  web:
+    error:
+      include-message: always
+  datasource:
+    url: jdbc:postgresql://postgres:5432/${DB_NAME:polypilot}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        jdbc:
+          time_zone: UTC
+  sql:
+    init:
+      mode: always
+      schema-locations:
+        - classpath:sql/001_schema.sql
+      data-locations:
+        - classpath:sql/002_seed_data.sql
+  data:
+    redis:
+      host: ${REDIS_HOST:redis}
+      port: ${REDIS_PORT:6379}
+    web:
+      pageable:
+        default-page-size: 25
+        max-page-size: 100
+        one-indexed-parameters: false
+
+  rabbitmq:
+    host: ${RABBITMQ_HOST:rabbitmq}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USER}
+    password: ${RABBITMQ_PASSWORD}
+
+# URLs for downstream Python services
+services:
+  auth-url: ${AUTH_SERVICE_URL:http://auth-service:8001}
+  ai-url:   ${AI_AGENT_URL:http://ai-agent:8002}
+
+# Timeouts for the ServiceProbe client that fans GET /health out to the Python services
+health:
+  probe:
+    connect-timeout: ${HEALTH_PROBE_CONNECT_TIMEOUT:2s}
+    read-timeout: ${HEALTH_PROBE_READ_TIMEOUT:3s}
+
+# Polymarket Gamma API base URL (market/series discovery + metadata)
+polymarket:
+  gamma-url: ${POLYMARKET_GAMMA_URL:https://gamma-api.polymarket.com}
+
+# Binance Spot public REST — source for the ohlc-sync job (OHLC candle collection).
+# Defaults are production-correct; nothing needs to be set for a normal run.
+# Which symbols/timeframes are synced lives in the DB-backed ticker / timeframe
+# tables, not here.
+binance:
+  base-url: ${BINANCE_BASE_URL:https://api.binance.com}
+  backfill-candles: ${BINANCE_BACKFILL_CANDLES:1000}
+  max-retries: ${BINANCE_MAX_RETRIES:3}
+  retry-backoff: ${BINANCE_RETRY_BACKOFF:1s}
+
+# Indicator catalog: how long the seed-owned catalog views are held in Redis
+# (indicator-catalog:v1:* keys). Static data — a reseed takes effect on the next
+# boot once entries age out.
+indicator:
+  catalog:
+    cache-ttl: ${INDICATOR_CATALOG_CACHE_TTL:1h}
+
+# Timeframe reference rows (timeframe:v1:* keys): managed directly in the DB with
+# no CRUD API, so a longer TTL than the indicator catalog is fine — a manual edit
+# just takes up to this long to be picked up.
+timeframe:
+  cache-ttl: ${TIMEFRAME_CACHE_TTL:24h}
+
+# Expose /actuator/health for Docker healthcheck
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
+  endpoint:
+    health:
+      show-details: always
+
+server:
+  port: 8080
+
+jwt:
+  secret: ${JWT_SECRET}
+
+encryption:
+  key: ${ENCRYPTION_KEY}
+
+# Strategy tree evaluation: bounded pool for dispatching indicator
+# calculations (see StrategyEvaluationService). Each task blocks on JPA/DB
+# I/O, so this must stay well under the Hikari pool size (default 10 — no
+# datasource.hikari.* override is set).
+polypilot:
+  strategy:
+    indicator-executor-pool-size: ${STRATEGY_INDICATOR_EXECUTOR_POOL_SIZE:4}
+  ai:
+    signals-queue: ${RABBITMQ_QUEUE_AI_SIGNALS:ai.signals}
+    news-ttl: ${POLYPILOT_AI_NEWS_TTL:15m}
+
+# SIWE (EIP-4361) login policy — enforced by the orchestrator, see auth/siwe/
+siwe:
+  domain: ${SIWE_DOMAIN:localhost:5173}
+  uri: ${SIWE_URI:http://localhost:5173}
+  allowed-chain-ids: ${SIWE_ALLOWED_CHAIN_IDS:1,137}

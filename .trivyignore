@@ -1,0 +1,25 @@
+# Every entry here has a real upstream fix, but only via a major (or framework-anchored)
+# version bump that's out of scope for this hardening pass per its own ground rules (patch/
+# minor dependency bumps only). Flagged for owner follow-up in the hardening report — do not
+# add an entry here without the same: a real fix must exist only above a major-version
+# boundary, or genuinely have no fix at all.
+
+# langchain-core: fix is 1.2.22; latest 0.3.x is 0.3.86 (already installed) — no patch-level
+# fix exists. Bumping to 1.x changes langchain's own public API and needs compatibility
+# verification against langchain-anthropic/langgraph, both still pinned to the 0.3.x line.
+# Reviewed 2026-09-21.
+CVE-2026-34070
+
+# langgraph-checkpoint: fix is 3.0.0; latest 2.x is 2.1.2 (already installed) — same shape as
+# above, a major bump with its own compatibility surface against langgraph 0.2.53.
+# Reviewed 2026-09-21.
+CVE-2025-64439
+
+# starlette (transitive via fastapi==0.115.5, both ai-agent and auth-service): fastapi 0.115.5
+# pins starlette<0.42.0,>=0.40.0, which excludes every fixed version (0.49.1 / 1.1.0 / 1.3.1).
+# Reaching a fixed starlette needs a fastapi bump past that pin, verified against both
+# services' test suites — a dedicated follow-up, not a patch-level override here.
+# Reviewed 2026-09-21.
+CVE-2025-62727
+CVE-2026-48818
+CVE-2026-54283

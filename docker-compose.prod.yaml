@@ -1,0 +1,180 @@
+name: polypilot
+
+# Production-like compose: builds every service's `prod` Dockerfile target (no bind
+# mounts, no hot reload), keeps the same depends_on/service_healthy ordering as
+# docker-compose.yaml (rabbitmq's queue declaration ordering matters — see root
+# CLAUDE.md's async-boundary notes), and publishes only the dashboard. Postgres,
+# Redis, RabbitMQ (including its management UI) and all three backend services are
+# reachable only on the internal polypilot-net bridge network.
+#
+# Known limitation carried over unchanged from dev: spring.sql.init.mode=always
+# means 001_schema.sql/002_seed_data.sql re-run on every orchestrator boot (idempotent,
+# ON CONFLICT DO NOTHING) — see README "Known limitations".
+
+services:
+
+  # ── Infrastructure — no published ports ──────────────────────────────────────
+
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-polypilot}
+      POSTGRES_USER: ${DB_USER:?set DB_USER in .env}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?set DB_PASSWORD in .env (openssl rand -base64 24)}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${POSTGRES_DB:-polypilot}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - polypilot-net
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    networks:
+      - polypilot-net
+
+  rabbitmq:
+    image: rabbitmq:3.13-management-alpine
+    restart: unless-stopped
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:?set RABBITMQ_USER in .env}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:?set RABBITMQ_PASSWORD in .env (openssl rand -base64 24)}
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - polypilot-net
+
+  # ── Python services — no published ports ─────────────────────────────────────
+
+  auth-service:
+    build:
+      context: ./auth-service
+      target: prod
+    restart: unless-stopped
+    environment:
+      # Deprecated/frozen — see repo CLAUDE.md (Polymarket API policy). Nothing reads
+      # this today; leave blank unless you're deliberately testing the frozen ClobAuth relay.
+      POLYMARKET_PRIVATE_KEY: ${POLYMARKET_PRIVATE_KEY}
+      POLYMARKET_CLOB_URL: ${POLYMARKET_CLOB_URL}
+    networks:
+      - polypilot-net
+
+  ai-agent:
+    build:
+      context: ./ai-agent
+      target: prod
+    restart: unless-stopped
+    environment:
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:?set ANTHROPIC_API_KEY in .env}
+      AI_AGENT_MODEL: ${AI_AGENT_MODEL:-claude-haiku-4-5-20251001}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_USER: ${RABBITMQ_USER}
+      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
+      RABBITMQ_QUEUE_AI_SIGNALS: ${RABBITMQ_QUEUE_AI_SIGNALS:-ai.signals}
+      RABBITMQ_PORT: ${RABBITMQ_PORT:-5672}
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8002/health', timeout=3)"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - polypilot-net
+
+  # ── Java orchestrator — no published port ────────────────────────────────────
+
+  orchestrator:
+    build:
+      context: ./orchestrator
+      target: prod
+    restart: unless-stopped
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: ${POSTGRES_DB:-polypilot}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      REDIS_HOST: ${REDIS_HOST:-redis}
+      REDIS_PORT: ${REDIS_PORT:-6379}
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: ${RABBITMQ_PORT:-5672}
+      RABBITMQ_USER: ${RABBITMQ_USER}
+      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
+      RABBITMQ_QUEUE_AI_SIGNALS: ${RABBITMQ_QUEUE_AI_SIGNALS:-ai.signals}
+      AUTH_SERVICE_URL: http://auth-service:8001
+      AI_AGENT_URL: http://ai-agent:8002
+      POLYMARKET_GAMMA_URL: ${POLYMARKET_GAMMA_URL:-https://gamma-api.polymarket.com}
+      BINANCE_BASE_URL: ${BINANCE_BASE_URL:-https://api.binance.com}
+      POLYPILOT_LIVE_MODE: "false"
+      ENCRYPTION_KEY: ${ENCRYPTION_KEY:?set ENCRYPTION_KEY in .env (openssl rand -base64 32)}
+      JWT_SECRET: ${JWT_SECRET:?set JWT_SECRET in .env (openssl rand -base64 32)}
+      SIWE_DOMAIN: ${SIWE_DOMAIN:-localhost:5173}
+      SIWE_URI: ${SIWE_URI:-http://localhost:5173}
+      SIWE_ALLOWED_CHAIN_IDS: ${SIWE_ALLOWED_CHAIN_IDS:-1,137}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      auth-service:
+        condition: service_healthy
+      ai-agent:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 120s
+    networks:
+      - polypilot-net
+
+  # ── React dashboard — the only published port ────────────────────────────────
+
+  dashboard:
+    build:
+      context: ./dashboard
+      target: prod
+      args:
+        VITE_WALLETCONNECT_PROJECT_ID: ${VITE_WALLETCONNECT_PROJECT_ID:-}
+    restart: unless-stopped
+    ports:
+      - "${DASHBOARD_PORT:-8081}:8080"
+    depends_on:
+      orchestrator:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:8080/"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - polypilot-net
+
+volumes:
+  postgres_data:
+  rabbitmq_data:
+
+networks:
+  polypilot-net:
+    driver: bridge

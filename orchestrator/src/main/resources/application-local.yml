@@ -1,0 +1,33 @@
+spring:
+  sql:
+    init:
+      mode: never
+  datasource:
+    url: jdbc:postgresql://localhost:5432/polypilot
+    username: ${DB_USER:polypilot}
+    password: ${DB_PASSWORD:polypilot_secret}
+  data:
+    redis:
+      host: localhost
+  rabbitmq:
+    host: localhost
+    username: ${RABBITMQ_USER:polypilot}
+    password: ${RABBITMQ_PASSWORD:polypilot_secret}
+
+
+services:
+  auth-url: http://localhost:8001   # auth-service running locally or in Docker
+  ai-url: http://localhost:8002   # ai-agent running locally or in Docker
+
+encryption:
+  key: IXa/1Tq0clszOqx2xYhFGC+5ddpAuhPD+4BxAfj5t3k=
+
+# Local dApp origin — the Vite dev server. chain 1 (mainnet) + 137 (Polygon).
+siwe:
+  domain: localhost:5173
+  uri: http://localhost:5173
+  allowed-chain-ids: 1,137
+
+logging:
+  level:
+    com.polypilot.auth.siwe: DEBUG   # log the reason behind every SIWE 401

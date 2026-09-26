@@ -1,0 +1,182 @@
+name: polypilot
+
+services:
+
+  # ── Infrastructure ────────────────────────────────────────────────────────
+
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-polypilot}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${POSTGRES_DB:-polypilot}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - polypilot-net
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    networks:
+      - polypilot-net
+
+  rabbitmq:
+    image: rabbitmq:3.13-management-alpine
+    restart: unless-stopped
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
+    ports:
+      - "5672:5672"
+      - "15672:15672"   # management UI → http://localhost:15672
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - polypilot-net
+
+  # ── Python services ───────────────────────────────────────────────────────
+
+  auth-service:
+    build:
+      context: ./auth-service
+      target: dev
+    ports:
+      - "8001:8001"
+    environment:
+      # Deprecated/frozen — see repo CLAUDE.md (Polymarket API policy). Nothing reads
+      # this today; leave blank unless you're deliberately testing the frozen ClobAuth relay.
+      POLYMARKET_PRIVATE_KEY: ${POLYMARKET_PRIVATE_KEY}
+      POLYMARKET_CLOB_URL: ${POLYMARKET_CLOB_URL}
+    volumes:
+      - ./auth-service:/app          # hot reload — code changes apply immediately
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - polypilot-net
+
+  ai-agent:
+    build:
+      context: ./ai-agent
+      target: dev
+    ports:
+      - "8002:8002"
+    environment:
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
+      AI_AGENT_MODEL: ${AI_AGENT_MODEL:-claude-haiku-4-5-20251001}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_USER: ${RABBITMQ_USER}
+      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
+      RABBITMQ_QUEUE_AI_SIGNALS: ${RABBITMQ_QUEUE_AI_SIGNALS:-ai.signals}
+      RABBITMQ_PORT: ${RABBITMQ_PORT:-5672}
+    volumes:
+      - ./ai-agent:/app              # hot reload
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8002/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - polypilot-net
+
+  # ── Java orchestrator ─────────────────────────────────────────────────────
+
+  orchestrator:
+    build:
+      context: ./orchestrator
+      target: dev
+    ports:
+      - "8080:8080"
+    environment:
+      DB_HOST: postgres          # ← must match the service name exactly
+      DB_PORT: 5432
+      DB_NAME: ${POSTGRES_DB:-polypilot}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      REDIS_HOST: ${REDIS_HOST:-redis}
+      REDIS_PORT: ${REDIS_PORT:-6379}
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: ${RABBITMQ_PORT:-5672}
+      RABBITMQ_USER: ${RABBITMQ_USER}
+      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD}
+      RABBITMQ_QUEUE_AI_SIGNALS: ${RABBITMQ_QUEUE_AI_SIGNALS:-ai.signals}
+      AUTH_SERVICE_URL: http://auth-service:8001
+      AI_AGENT_URL: http://ai-agent:8002
+      POLYMARKET_GAMMA_URL: ${POLYMARKET_GAMMA_URL:-https://gamma-api.polymarket.com}
+      BINANCE_BASE_URL: ${BINANCE_BASE_URL:-https://api.binance.com}
+      POLYPILOT_LIVE_MODE: false
+      ENCRYPTION_KEY: ${ENCRYPTION_KEY}
+      # No default — a shared/committed value could forge tokens for every clone of this repo.
+      # JwtService also rejects known-weak values even if one is set.
+      JWT_SECRET: ${JWT_SECRET:?set JWT_SECRET in .env (openssl rand -base64 32)}
+      SIWE_DOMAIN: ${SIWE_DOMAIN:-localhost:5173}
+      SIWE_URI: ${SIWE_URI:-http://localhost:5173}
+      SIWE_ALLOWED_CHAIN_IDS: ${SIWE_ALLOWED_CHAIN_IDS:-1,137}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      auth-service:
+        condition: service_healthy
+      ai-agent:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 120s             # JVM + Spring Boot needs time on first boot
+    networks:
+      - polypilot-net
+
+  # ── React dashboard ───────────────────────────────────────────────────────
+
+  dashboard:
+    build:
+      context: ./dashboard
+      target: dev
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./dashboard:/app
+      - /app/node_modules            # keep container's node_modules, don't overwrite
+    depends_on:
+      orchestrator:
+        condition: service_healthy
+    networks:
+      - polypilot-net
+
+volumes:
+  postgres_data:
+
+networks:
+  polypilot-net:
+    driver: bridge

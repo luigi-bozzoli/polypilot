@@ -1,0 +1,25 @@
+title = "PolyPilot gitleaks config"
+
+[extend]
+useDefault = true
+
+# Every entry here is a known, understood, non-production value — reviewed 2026-09-21.
+# Never widen these to a bare-word or short pattern; keep them as full-value matches so a
+# genuinely different secret landing in the same file still gets caught.
+[allowlist]
+regexes = [
+  # Rotated JWT dev default (application.yml's old hardcoded fallback, removed in the JWT_SECRET
+  # fail-fast fix). Historical only — not present in the current tree — and even if reused, is
+  # explicitly rejected by JwtService's own denylist (orchestrator/.../auth/service/JwtService.java).
+  '''K7gNU3sdo\+OL0wNhqoVWhr3g6s1xYv72ol/pe/Unols=''',
+
+  # Generated JWT test fixture reused verbatim across orchestrator unit/integration tests
+  # (JwtServiceTest, JwtFilterTest, WalletControllerAuthTest, SecurityConfigTest,
+  # AiSignalPipelineIT) — a fixture constant, never used outside JUnit.
+  '''TCjcvvtjTRHefQlyrDJOratZz\+IDf7cGtois83a7iLg=''',
+
+  # Shared local-dev-only AES key for application-local.yml's `local` Spring profile
+  # convenience (running the orchestrator outside Docker) — publicly known via .env.example
+  # by design, and only ever encrypts the deprecated/frozen wallet-credential feature locally.
+  '''IXa/1Tq0clszOqx2xYhFGC\+5ddpAuhPD\+4BxAfj5t3k=''',
+]
