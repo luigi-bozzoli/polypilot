@@ -18,11 +18,11 @@ _NOT_IMPLEMENTED = NotImplementedResponse(detail="not implemented yet")
 
 @router.post("/sign-order", response_model=NotImplementedResponse)
 def sign_order() -> NotImplementedResponse:
-    """Deprecated/frozen — signs orders for the Polymarket CLOB. Do not implement further; see CLAUDE.md."""
+    """Deprecated/frozen — signs Polymarket CLOB orders. Do not implement; see CLAUDE.md."""
     return _NOT_IMPLEMENTED
 
 
 @router.post("/credentials", response_model=NotImplementedResponse)
 def get_credentials() -> NotImplementedResponse:
-    """Deprecated/frozen — derives L2 API key + secret from the L1 wallet private key. Do not implement further; see CLAUDE.md."""
+    """Deprecated/frozen — derives L2 creds from the L1 key. Do not implement; see CLAUDE.md."""
     return _NOT_IMPLEMENTED
