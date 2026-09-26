@@ -40,7 +40,7 @@
         <mapstruct.version>1.6.3</mapstruct.version>
         <jjwt.version>0.12.6</jjwt.version>
         <ta4j.version>0.19</ta4j.version>
-        <shedlock.version>6.6.0</shedlock.version>
+        <shedlock.version>7.10.1</shedlock.version>
     </properties>
 
     <dependencies>
