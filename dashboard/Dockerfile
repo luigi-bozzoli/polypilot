@@ -1,5 +1,5 @@
 # ── dev (docker-compose.yaml uses build.target: dev) ───────────────────────────
-FROM node:20-alpine AS dev
+FROM node:26-alpine AS dev
 
 WORKDIR /app
 
@@ -14,7 +14,7 @@ EXPOSE 5173
 CMD ["npm", "run", "dev"]
 
 # ── prod stage 1: build the static bundle ───────────────────────────────────────
-FROM node:20-alpine AS build
+FROM node:26-alpine AS build
 
 WORKDIR /app
 
