@@ -1,8 +1,8 @@
 # Demo mode
 
 `VITE_DEMO=true` (Vite `--mode demo`) swaps the dashboard's backend for [MSW](https://mswjs.io/) handlers
-answering from typed, static fixtures — no orchestrator, no `auth-service`, no external network calls. See the
-root plan for the full design; this file is the living endpoint inventory and a short "how it works".
+answering from typed, static fixtures — no orchestrator, no `auth-service`, no external network calls. This
+file is the living endpoint inventory and a short "how it works".
 
 **Real code imports nothing from `src/demo` except the `main.tsx` bootstrap** (`await import('./demo/start')`,
 gated on `import.meta.env.VITE_DEMO === 'true'`). Whenever you add or change an API call in `src/features/*Api.ts`,
@@ -17,8 +17,8 @@ update this table, its fixture and its handler in the same change — the Playwr
    (`handlers/*.ts`), each returning fixtures from `fixtures/*.ts` typed against the dashboard's real DTOs
    (imported from `src/features/*/types.ts` — never re-declared).
 3. A catch-all handler (`handlers/index.ts`, registered last) answers any unmatched `*/api/*` request with `501`
-   and logs `[demo] UNMOCKED`, so a gap is loud, not a silent real network call.
-4. Strategies are the only stateful domain — `db.ts` holds an in-memory `Map`, reseeded on every load (Phase 6).
+   and logs `[demo] UNMOCKED`.
+4. Strategies are the only stateful domain — `db.ts` holds an in-memory `Map`, reseeded on every load.
    Everything else is static fixture data.
 5. `scripts/check-bundle.mjs` asserts the demo marker string and `mockServiceWorker.js` are present in a demo
    `dist/` and absent from a real one.
@@ -58,14 +58,6 @@ calls from a page are still included and mocked (see the "Anything else" note un
 | GET | `/api/health` | `healthApi.fetchHealth` | — | `HealthResponse` | non-OK → error | `handlers/health.ts` |
 | GET | `/api/health/checks` | `healthApi.fetchHealthChecks` | — | `ChecksResponse` | non-OK → error | `handlers/health.ts` |
 | GET | `/api/health/infrastructure` | `healthApi.fetchInfrastructure` | — | `InfrastructureResponse` | non-OK → error | `handlers/health.ts` |
-
-**Anything else.** A full grep of `src` for `fetch(`/`axios`/`XMLHttpRequest`/`EventSource`/`WebSocket` (Phase 0)
-turned up only the calls above, all funneled through `src/lib/http.ts` or `authApi.ts`'s local `fetch`. The
-plan's snapshot backend surface additionally lists `GET /api/auth/me`, `GET /api/admin/users`,
-`POST /api/wallet/connect`, `GET/POST /schedule/config` and a manual `POST /market` sync — **none of these are
-called anywhere in the dashboard source** (confirmed by grep), so per the plan's rule 5 ("code is ground truth")
-they are not mocked. `ConnectWalletButton.tsx` (wagmi connect/disconnect, no login) is also dead code — not
-imported by any page or component — so it needs no demo replacement either.
 
 ## Catch-all
 

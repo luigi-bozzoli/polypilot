@@ -32,14 +32,15 @@ Sign-In With Ethereum (EIP-4361). On the login screen:
    a `personal_sign` signature.
 3. The `{ message, signature }` pair goes to `POST /api/auth/siwe/verify`; the
    returned JWT is stored exactly like a password login and you land on
-   `/health`. Refreshing keeps you signed in.
+   `/overview`. Refreshing keeps you signed in.
 
 If the wallet isn't on an allowed chain the app offers to switch it first.
 
 ### Reviewers / demo — email + password (secondary)
 
 Behind the **Admin & demo sign-in** link on the login screen. Still
-`POST /api/auth/login`; **no wallet needed**.
+`POST /api/auth/login`; **no wallet needed**. Like the wallet flow, the returned
+JWT is stored and you land on `/overview` — not the homepage (`/`).
 `orchestrator/src/main/resources/sql/002_seed_data.sql` seeds these on every boot
 (idempotent):
 
@@ -76,12 +77,6 @@ account from the UI.
   `window.location` at sign-in time. The backend side is `siwe.domain` /
   `siwe.uri` (`SIWE_DOMAIN`, `SIWE_URI`; defaults `localhost:5173` /
   `http://localhost:5173`). For local dev the defaults already match.
-
-## Optional: trading-wallet connection
-
-Connecting a wallet is part of *login* now, not a required post-login step. A
-later trading-credential step (`POST /api/wallet/connect`) can still run as an
-optional authenticated action, but it is not needed to authenticate.
 
 ## Third-party licenses
 
