@@ -1,6 +1,7 @@
 """Logging setup shared by all PolyPilot Python services.
 
-Kept byte-identical across ``auth-service`` and ``ai-agent``. If you change it here, change it there too.
+Kept byte-identical across ``auth-service`` and ``ai-agent``.
+If you change it here, change it there too.
 """
 
 from __future__ import annotations
