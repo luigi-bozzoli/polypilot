@@ -8,8 +8,7 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 /**
- * Response of {@code GET /market/{marketId}/price-history}. Contract:
- * {@code contracts/market-price-history.md}.
+ * Response of {@code GET /market/{marketId}/price-history}.
  *
  * <p>{@code points} is chronological, ascending by {@code at}; an empty list
  * means the market has no snapshots yet (and no live price to synthesise from) —

@@ -25,13 +25,12 @@ import java.util.UUID;
  * the default auth filter — any valid token, scoped to the caller's own rows.
  *
  * <p>Backs the full audit-log list/detail mocks ({@code 19-audit-log.html},
- * {@code 06-audit-log-detail.html}); the market-scoped ({@code contracts/market-engine-decisions.md})
+ * {@code 06-audit-log-detail.html}); the market-scoped
  * and strategy-scoped ({@code StrategyDecisionsCard.tsx}) feeds are thinner slices of this same
  * query, added on {@code MarketController}/{@code StrategyController} respectively.
  *
  * <p>Only what {@code audit_logs} actually persists is returned — no rule-by-rule breakdown or
- * signal-bar data, since {@code StrategyEvaluationService.evaluate()} doesn't capture that today
- * (see {@code orchestrator/CLAUDE.md}).
+ * signal-bar data, since {@code StrategyEvaluationService.evaluate()} doesn't capture that today).
  */
 @RestController
 @RequestMapping("/audit-logs")

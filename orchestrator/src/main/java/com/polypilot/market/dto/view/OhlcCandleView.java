@@ -9,8 +9,7 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
 /**
- * One Binance candle, emitted oldest-first by {@code GET /market/{marketId}/ohlc}. Contract:
- * {@code contracts/market-ohlc.md}.
+ * One Binance candle, emitted oldest-first by {@code GET /market/{marketId}/ohlc}.
  *
  * <p>Mirrors {@link com.polypilot.ohlc.entity.OhlcCandle} field-for-field; {@code closed}
  * distinguishes the still-forming rightmost bar (if included) from settled history so the

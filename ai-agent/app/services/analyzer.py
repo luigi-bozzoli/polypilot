@@ -1,10 +1,4 @@
 """Summarizer + sentiment scorer — one structured-output Claude call.
-
-Per docs/news_sourcing.MD §2 (spam/malicious-content risk) and the schema
-comment tying summary + sentiment to "the same LangGraph run"
-(001_schema.sql:384-386): one call produces both fields, halving LLM spend
-per run versus two separate calls and avoiding them ever disagreeing about
-what they read.
 """
 
 from __future__ import annotations

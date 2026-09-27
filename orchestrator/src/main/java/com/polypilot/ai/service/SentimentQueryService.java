@@ -10,8 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 /**
- * Read-side query backing {@code GET /market/{marketId}/sentiment/latest}.
- * Contract: {@code contracts/market-sentiment.md}. Reuses the same
+ * Read-side query backing {@code GET /market/{marketId}/sentiment/latest}. Reuses the same
  * {@link SentimentScoreRepository#findFirstByMarketIdOrderByScoredAtDesc}
  * method {@code MarketFieldResolver} already calls for strategy evaluation.
  */

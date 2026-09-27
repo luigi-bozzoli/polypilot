@@ -16,7 +16,7 @@ import java.util.UUID;
  * {@code GET /strategies/{id}/orders}. Mirrors the {@code Order} entity field-for-field
  * (real {@code OrderStatus}, {@code sizeRequested}/{@code sizeFilled} kept separate) plus
  * the denormalized {@code marketQuestion} so {@code StrategyRecentOrdersCard} doesn't need
- * a second fetch. Contract: {@code contracts/strategy-recent-orders.md}.
+ * a second fetch.
  */
 @Data
 @Builder

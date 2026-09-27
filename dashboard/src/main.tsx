@@ -27,7 +27,7 @@ function renderApp() {
 
 async function bootstrap() {
   // Literal comparison (not a variable/helper) so Vite dead-code-eliminates this whole branch,
-  // and the dynamic import's chunk, out of real builds — see src/demo/README.md.
+  // and the dynamic import's chunk, out of real builds.
   if (import.meta.env.VITE_DEMO === 'true') {
     const { startDemo } = await import('./demo/start')
     await startDemo() // must finish (worker active) before first render

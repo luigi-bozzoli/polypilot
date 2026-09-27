@@ -10,14 +10,11 @@ import java.time.OffsetDateTime;
 import java.util.UUID;
 
 /**
- * Response of {@code GET /market/{marketId}/sentiment/latest}. Contract:
- * {@code contracts/market-sentiment.md}.
+ * Response of {@code GET /market/{marketId}/sentiment/latest}. 
  *
  * <p>{@code score} (signed -1..1) always serializes as {@code null}:
  * {@code sentiment_scores} only stores the BULLISH/BEARISH/NEUTRAL label plus
- * a 0..1 confidence magnitude, no separate signed scalar — the contract
- * already marks {@code score} optional for exactly this reason
- * (docs/news_summary.MD §5, §11.5).
+ * a 0..1 confidence magnitude, no separate signed scalar.
  */
 @Data
 @Builder

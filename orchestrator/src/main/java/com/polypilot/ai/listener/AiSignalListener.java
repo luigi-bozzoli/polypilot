@@ -27,7 +27,7 @@ import java.util.Map;
 /**
  * Consumes {@code ai.signals} and writes both the {@code news_summaries} and
  * {@code sentiment_scores} rows from a single message — matching "same
- * LangGraph run" at the transport level, per {@code docs/news_summary.MD} §4.5.
+ * LangGraph run" at the transport level.
  * (No {@code audit_logs} row: see the comment in {@link #onSignal} for why.)
  *
  * <p>A malformed/unparseable message, or an unknown {@code market_id}, is

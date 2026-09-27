@@ -3,7 +3,7 @@ package com.polypilot.health.dto;
 import lombok.Value;
 
 /**
- * Per-service health metrics row (see {@code contracts/health-service-metrics.md}).
+ * Per-service health metrics row.
  *
  * <ul>
  *   <li>{@code uptime} — pre-formatted wall-clock uptime, e.g. {@code "3d 04h"}</li>

@@ -6,8 +6,7 @@ import { formatAuditTimestamp } from '../../features/audit/format'
 
 /**
  * "Engine decisions on this market" (mock `13-market-detail.html`).
- * Backed by `GET /api/market/{marketId}/decisions` — see
- * `contracts/market-engine-decisions.md`. Newest-first, rendered verbatim
+ * Backed by `GET /api/market/{marketId}/decisions`. Newest-first, rendered verbatim
  * (the `detail` line is already formatted server-side).
  */
 export function EngineDecisionsCard({ marketId }: { marketId: string }) {

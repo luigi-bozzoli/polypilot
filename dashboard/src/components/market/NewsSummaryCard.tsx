@@ -1,7 +1,7 @@
 import { useLatestNews } from '../../features/market/useLatestNews'
 import { Card, Empty, ErrorState, SectionLabel } from './primitives'
 
-/** "News summary · news_summaries" (mock `13-market-detail.html`). Contract: `contracts/market-news-summary.md`. */
+/** "News summary · news_summaries" (mock `13-market-detail.html`). */
 export function NewsSummaryCard({ marketId }: { marketId: string }) {
   const { data, isLoading, isError } = useLatestNews(marketId)
 

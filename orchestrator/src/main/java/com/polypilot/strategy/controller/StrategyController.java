@@ -106,7 +106,6 @@ public class StrategyController {
 
     /**
      * Strategy-scoped recent orders, newest first — backs {@code StrategyRecentOrdersCard}.
-     * Contract: {@code contracts/strategy-recent-orders.md}.
      */
     @GetMapping("/{id}/orders")
     public List<StrategyOrderView> getOrders(

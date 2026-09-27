@@ -1,7 +1,3 @@
-/docs
-/contracts
-/dashboard/mocks
-
 # ── Environment & secrets ──────────────────────────────────────────────────────
 .env
 .env.*

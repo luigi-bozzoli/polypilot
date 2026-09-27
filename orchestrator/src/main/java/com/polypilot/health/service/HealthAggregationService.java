@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 /**
  * Builds the aggregate {@code GET /health} body: the orchestrator's own status
  * and metrics, plus a fanned-out probe of each downstream Python service.
- * Contract: {@code contracts/health-service-metrics.md}.
  */
 @Slf4j
 @Service

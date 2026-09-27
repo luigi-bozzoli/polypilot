@@ -185,7 +185,7 @@ export type UpdateStrategyRequest = CreateStrategyRequest
 /* GET /strategies/{id}/orders                                        */
 /* ------------------------------------------------------------------ */
 
-/** Mirrors the backend's real `OrderStatus` enum — see `contracts/strategy-recent-orders.md`. */
+/** Mirrors the backend's real `OrderStatus` enum */
 export type OrderStatus = 'PENDING' | 'OPEN' | 'FILLED' | 'PARTIALLY_FILLED' | 'CANCELLED' | 'FAILED'
 
 /** One row of the strategy-scoped recent-orders feed. Mirrors `StrategyOrderView` (orchestrator). */

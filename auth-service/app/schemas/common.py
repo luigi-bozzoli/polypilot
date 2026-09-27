@@ -7,7 +7,7 @@ from pydantic import BaseModel
 
 class NotImplementedResponse(BaseModel):
     """Body returned by the deprecated/frozen ``/auth/sign-order`` and
-    ``/auth/credentials`` stubs (see CLAUDE.md) — these are permanently
+    ``/auth/credentials`` stubs — these are permanently
     stubbed, not pending implementation."""
 
     detail: str

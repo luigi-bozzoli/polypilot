@@ -55,7 +55,7 @@ import static org.mockito.Mockito.when;
  * is a real proxy hop instead of a self-invoked call. The lock/transaction wrapper itself is an
  * infrastructure concern exercised by {@code StrategyEvaluationRunnerTest}, not here.
  *
- * <p>Since docs/open_trades.md landed, a {@code true} evaluation result also attempts to open a
+ * <p>A {@code true} evaluation result also attempts to open a
  * (simulated) trade via {@link OpenTradeService} and writes a second {@code audit_logs} row for
  * that outcome — see {@code evaluatesTrue_*} below.
  *

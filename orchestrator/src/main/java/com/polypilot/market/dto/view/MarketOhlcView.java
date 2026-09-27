@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 /**
- * Response of {@code GET /market/{marketId}/ohlc}. Contract: {@code contracts/market-ohlc.md}.
  *
  * <p>{@code symbol} is {@code null} exactly when the market's series has no linked
  * {@code Ticker} asset — that is the chart's "unavailable" signal, distinct from a linked

@@ -10,8 +10,7 @@ import java.time.OffsetDateTime;
 
 /**
  * One sampled point on a market's probability / price history. Emitted
- * oldest-first by {@code GET /market/{marketId}/price-history}. Contract:
- * {@code contracts/market-price-history.md}.
+ * oldest-first by {@code GET /market/{marketId}/price-history}.
  *
  * <p>{@code at} serializes as ISO-8601 UTC (same Jackson/JSR-310 path as
  * {@code MarketView.lastSyncedAt}); the {@code BigDecimal} fields serialize as

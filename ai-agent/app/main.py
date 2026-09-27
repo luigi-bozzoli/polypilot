@@ -1,7 +1,7 @@
 """PolyPilot ai-agent — application factory.
 
 News fetch → summarize → sentiment score, published to RabbitMQ. Both
-``/health`` and ``/ai/analyze`` are implemented; see ``CLAUDE.md``.
+``/health`` and ``/ai/analyze`` are implemented.
 """
 
 from __future__ import annotations

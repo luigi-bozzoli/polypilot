@@ -42,8 +42,7 @@ import static org.mockito.Mockito.when;
 /**
  * Exercises {@link OpenTradeService}: {@link OpenTradeService#resolveFillPrice} (the
  * refresh-with-fallback price resolution slice) and {@link OpenTradeService#openTrade}'s full
- * order-construction / position-upsert flow. See {@code docs/open_trades.md} §6-§8 for the spec
- * this follows.
+ * order-construction / position-upsert flow. 
  *
  * <p>{@code marketId} is passed in explicitly by the caller ({@code StrategyService.runEvaluation},
  * which resolves it from the strategy's series) rather than read off the {@link Strategy} entity.

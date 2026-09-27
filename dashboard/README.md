@@ -1,7 +1,6 @@
 # PolyPilot Dashboard
 
-React 18 + TypeScript + Vite frontend for PolyPilot. See the repo-root `CLAUDE.md`
-for the monorepo architecture and `dashboard/CLAUDE.md` for dashboard-specific notes.
+React 18 + TypeScript + Vite frontend for PolyPilot.
 
 ## Running
 

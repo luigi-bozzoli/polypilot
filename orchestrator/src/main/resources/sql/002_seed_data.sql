@@ -10,7 +10,6 @@
 --
 -- Credentials now live in user_identities, not on users. The secret column is a
 -- BCrypt hash (strength 12, matching SecurityConfig's BCryptPasswordEncoder(12)).
--- Plaintext demo credentials are documented in dashboard/README.md only.
 --
 -- Every insert here is idempotent (fixed UUIDs / unique keys + ON CONFLICT
 -- DO NOTHING) so spring.sql.init can re-run it on every boot.
@@ -28,7 +27,7 @@ ON CONFLICT (role_name) DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 2. DEFAULT ADMIN USER  (fixed UUID so the seed is safe to re-run)
---    Password identity: admin@polypilot.local / see dashboard/README.md
+--    Password identity: admin@polypilot.local
     -- DEFAULT PASSWORD: password
 -- ---------------------------------------------------------------------------
 
@@ -53,7 +52,7 @@ ON CONFLICT (type, identifier) DO NOTHING;
 
 -- ---------------------------------------------------------------------------
 -- 3. DEMO USER  (fixed UUID, role USER, no wallet required)
---    Password identity: demo@polypilot.local / see dashboard/README.md
+--    Password identity: demo@polypilot.local
 -- ---------------------------------------------------------------------------
 
 INSERT INTO users (id, role_id, display_name, enabled, created_at, updated_at)

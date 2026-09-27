@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
  * One selectable candle interval, in display order. Backs the dashboard's OHLC chart
  * timeframe selector so it stays driven by the DB-backed {@code timeframe} table rather than a
  * hardcoded list — same "enable/disable with a DB row" philosophy as the rest of
- * {@code reference/}. Contract: {@code contracts/market-ohlc.md}.
+ * {@code reference/}.
  */
 @Data
 @Builder

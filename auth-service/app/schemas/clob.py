@@ -4,7 +4,7 @@ The request is the ``{address, timestamp, nonce}`` triple the orchestrator's
 wallet-connect challenge hands back, plus the client-side EIP-712 signature.
 The response is the L2 API credential triple Polymarket derives.
 
-Deprecated/frozen — see repo-root CLAUDE.md's Polymarket API policy.
+Deprecated/frozen.
 """
 
 from __future__ import annotations

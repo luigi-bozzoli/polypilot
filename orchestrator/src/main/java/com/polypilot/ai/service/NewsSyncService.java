@@ -15,7 +15,7 @@ import java.util.List;
  * (matching that class's own {@code updateOpenMarkets} scope, rather than
  * narrowing to markets with an enabled strategy attached — sentiment/news
  * data should stay available on the dashboard independently of whether a
- * strategy happens to be attached, see docs/news_summary.MD §11.7), each
+ * strategy happens to be attached, each
  * delegated to {@link NewsSyncItemService} in its own {@code REQUIRES_NEW}
  * transaction so one bad market never blocks the rest.
  */

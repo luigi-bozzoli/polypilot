@@ -71,8 +71,7 @@ public class AuditLogQueryService {
     }
 
     /**
-     * Market-scoped slice, newest first — backs {@code EngineDecisionsCard} /
-     * {@code contracts/market-engine-decisions.md}.
+     * Market-scoped slice, newest first — backs {@code EngineDecisionsCard}
      */
     @Transactional(readOnly = true)
     public MarketDecisionsView getMarketDecisions(UUID userId, String marketId, int limit) {

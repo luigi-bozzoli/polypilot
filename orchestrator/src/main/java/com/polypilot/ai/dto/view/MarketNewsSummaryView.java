@@ -10,8 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Response of {@code GET /market/{marketId}/news/latest}. Contract:
- * {@code contracts/market-news-summary.md}.
+ * Response of {@code GET /market/{marketId}/news/latest}. 
  */
 @Data
 @Builder

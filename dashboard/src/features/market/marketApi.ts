@@ -13,8 +13,7 @@ import {
  * GET /api/market/:marketId/price-history?window=12h
  *
  * `window` is a look-back hint (`12h`, `24h`, `7d`); the server may clamp it and
- * echoes the effective value back on `MarketPriceHistory.window`. Contract:
- * `contracts/market-price-history.md`.
+ * echoes the effective value back on `MarketPriceHistory.window`.
  */
 export function fetchMarketPriceHistory(
   marketId: string,
@@ -29,7 +28,7 @@ export function fetchMarketPriceHistory(
  * GET /api/market/:marketId/ohlc?timeframe=1h&limit=200
  *
  * `timeframe`/`limit` are optional server-side defaults (see the contract) — omit
- * either to let the backend pick. Contract: `contracts/market-ohlc.md`.
+ * either to let the backend pick.
  */
 export function fetchMarketOhlc(
   marketId: string,
@@ -45,7 +44,7 @@ export function fetchMarketOhlc(
 
 /**
  * Enabled candle intervals, in display order — feeds the OHLC chart's timeframe
- * selector. GET /api/reference/timeframes. Contract: `contracts/market-ohlc.md`.
+ * selector. GET /api/reference/timeframes.
  */
 export function fetchTimeframes(): Promise<TimeframeOption[]> {
   return authGet<TimeframeOption[]>('/api/reference/timeframes')
@@ -53,9 +52,7 @@ export function fetchTimeframes(): Promise<TimeframeOption[]> {
 
 /**
  * Market-scoped recent orders, newest first.
- * GET /api/market/:marketId/orders?limit=20
- *
- * Contract: `contracts/market-recent-orders.md`.
+ * GET /api/market/:marketId/orders?limit=20.
  */
 export function fetchMarketOrders(marketId: string, limit = 20): Promise<MarketOrdersResponse> {
   return authGet<MarketOrdersResponse>(`/api/market/${marketId}/orders?limit=${limit}`)
@@ -63,7 +60,7 @@ export function fetchMarketOrders(marketId: string, limit = 20): Promise<MarketO
 
 /**
  * Latest non-expired news summary for one market, or `undefined` (204 → no
- * row yet). Contract: `contracts/market-news-summary.md`.
+ * row yet).
  */
 export function fetchLatestNews(marketId: string): Promise<MarketNewsSummary | undefined> {
   return authGetOptional<MarketNewsSummary>(`/api/market/${marketId}/news/latest`)
@@ -71,7 +68,6 @@ export function fetchLatestNews(marketId: string): Promise<MarketNewsSummary | u
 
 /**
  * Latest sentiment score for one market, or `undefined` (204 → no row yet).
- * Contract: `contracts/market-sentiment.md`.
  */
 export function fetchLatestSentiment(marketId: string): Promise<MarketSentiment | undefined> {
   return authGetOptional<MarketSentiment>(`/api/market/${marketId}/sentiment/latest`)

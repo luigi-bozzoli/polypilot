@@ -10,8 +10,7 @@ import { OpenPositionsCard } from '../components/overview/OpenPositionsCard'
  * whole page behind one spinner, since the widgets are independently sourced.
  *
  * The mock's daily-exposure gauge is intentionally not built: nothing computes a strategy's
- * actual spend against `maxDailyExposure` yet (`RiskGuard` is explicitly out of scope per
- * `docs/open_trades.md`). The mock's "Simulated equity" stat is also omitted — no starting-capital
+ * actual spend against `maxDailyExposure` yet. The mock's "Simulated equity" stat is also omitted — no starting-capital
  * baseline exists in the schema to compute it from. See `StatRow`.
  */
 export function OverviewPage() {

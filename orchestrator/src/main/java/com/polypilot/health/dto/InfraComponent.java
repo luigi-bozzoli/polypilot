@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Value;
 
 /**
- * One infrastructure component's status (see {@code contracts/health-infrastructure.md}).
+ * One infrastructure component's status.
  *
  * <ul>
  *   <li>{@code name} — display name, e.g. {@code "Postgres 16"}</li>

@@ -40,7 +40,7 @@ class Settings(BaseSettings):
     )
     log_level: str = Field(default="INFO", validation_alias="LOG_LEVEL")
 
-    # News sourcing (docs/news_sourcing.MD): GDELT DOC 2.0 — free, unrestricted
+    # News sourcing: GDELT DOC 2.0 — free, unrestricted
     # commercial use, no API key. Revisit that doc before swapping sources.
     gdelt_base_url: str = Field(
         default="https://api.gdeltproject.org/api/v2/doc/doc",

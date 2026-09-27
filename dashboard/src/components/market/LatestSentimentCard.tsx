@@ -10,7 +10,7 @@ const LABEL_COLOR: Record<SentimentLabel, string> = {
 
 const KV_ROWS = ['model_used', 'article_count', 'scored_at'] as const
 
-/** "Latest sentiment · sentiment_scores" (mock `13-market-detail.html`). Contract: `contracts/market-sentiment.md`. */
+/** "Latest sentiment · sentiment_scores" (mock `13-market-detail.html`). */
 export function LatestSentimentCard({ marketId }: { marketId: string }) {
   const { data, isLoading, isError } = useLatestSentiment(marketId)
 

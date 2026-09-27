@@ -4,8 +4,7 @@ fetch news (GDELT) -> summarize + score (one Claude call) -> publish
 (RabbitMQ ``ai.signals``). The orchestrator calls ``POST /ai/analyze``
 fire-and-forget: this returns a 202-equivalent immediately and the actual
 pipeline runs on a FastAPI background task, matching the repo's documented
-async boundary (root CLAUDE.md: "AI sentiment is fire-and-forget over
-RabbitMQ").
+async boundary.
 """
 
 from __future__ import annotations

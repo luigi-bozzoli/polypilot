@@ -15,7 +15,7 @@ import java.util.UUID;
  * One row of the market-scoped recent-orders feed, body of {@code GET /market/{marketId}/orders}.
  * Mirrors {@code StrategyOrderView} field-for-field, but denormalizes the owning strategy's
  * {@code strategyName} instead of the market question (the market is already known from the
- * request). Contract: {@code contracts/market-recent-orders.md}.
+ * request).
  */
 @Data
 @Builder

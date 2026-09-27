@@ -1,9 +1,3 @@
-/**
- * Shapes returned by the orchestrator's health surface. See
- * `/contracts/health-service-metrics.md`, `/contracts/health-checks.md` and
- * `/contracts/health-infrastructure.md`.
- */
-
 /** Per-service metrics row (uptime / latency / one detail fragment). */
 export type ServiceMetrics = {
   /** Pre-formatted wall-clock uptime, e.g. "3d 04h". */

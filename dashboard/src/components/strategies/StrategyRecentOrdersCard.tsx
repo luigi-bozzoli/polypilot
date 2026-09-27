@@ -8,7 +8,7 @@ import { formatPriceCents } from '../../features/series/format'
 /**
  * "Recent orders from this strategy" (mock `15-strategy-detail.html`). Backed by
  * `GET /api/strategies/{id}/orders` — the strategy-scoped slice of `orders`, newest
- * first. Contract: `contracts/strategy-recent-orders.md`.
+ * first.
  */
 const COLUMNS = ['Placed', 'Market', 'Side', 'Req / Filled', 'Price', 'Status'] as const
 

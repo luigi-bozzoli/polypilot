@@ -1,5 +1,4 @@
-"""Pins the deliberately-stubbed contract of the frozen order-placement endpoints
-(see repo-root CLAUDE.md's Polymarket API policy and auth-service/CLAUDE.md) —
+"""Pins the deliberately-stubbed contract of the frozen order-placement endpoints —
 they must keep returning 200 "not implemented yet", not be built out further.
 """
 

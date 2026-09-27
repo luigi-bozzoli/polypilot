@@ -23,8 +23,7 @@ import { useMarketOhlc, useTimeframes } from '../../features/market/useMarketOhl
  * (chart created once in a ref, data pushed on refetch so pan/zoom survives), a
  * `CandlestickSeries` instead of an `AreaSeries`, and a timeframe selector sourced
  * from `GET /api/reference/timeframes` instead of a hardcoded window list.
- * Fed by `GET /api/market/:id/ohlc` via `useMarketOhlc`. Contract:
- * `contracts/market-ohlc.md`.
+ * Fed by `GET /api/market/:id/ohlc` via `useMarketOhlc`.
  *
  * Lightweight Charts is Apache-2.0 and requires a visible TradingView
  * attribution — the link below the chart card satisfies that (its own
@@ -228,11 +227,10 @@ export function MarketOhlcChart({ marketId }: { marketId: string }) {
                 onClick={() => setTimeframe(t.code)}
                 aria-pressed={t.code === timeframe}
                 title={t.label}
-                className={`rounded border px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-wider transition-colors ${
-                  t.code === timeframe
+                className={`rounded border px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-wider transition-colors ${t.code === timeframe
                     ? 'border-accent-border bg-accent-dim text-accent'
                     : 'border-border bg-bg2 text-text-muted hover:text-text-secondary'
-                }`}
+                  }`}
               >
                 {t.code}
               </button>

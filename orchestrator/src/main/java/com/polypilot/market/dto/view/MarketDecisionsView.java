@@ -7,10 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-/**
- * Body of {@code GET /market/{marketId}/decisions}. Shape matches
- * {@code MarketDecisionsResponse} in {@code contracts/market-engine-decisions.md}.
- */
+
 @Data
 @Builder
 @NoArgsConstructor

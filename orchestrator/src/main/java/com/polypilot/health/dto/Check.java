@@ -3,7 +3,7 @@ package com.polypilot.health.dto;
 import lombok.Value;
 
 /**
- * One deploy / schema check (see {@code contracts/health-checks.md}).
+ * One deploy / schema check.
  *
  * <ul>
  *   <li>{@code name} — machine-readable check name, shown as the card label</li>

@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
 
 /**
  * Read-side query for a market's probability / price history, backing the
- * dashboard chart. Contract: {@code contracts/market-price-history.md}.
+ * dashboard chart.
  *
  * <p>Source rows come from {@code price_snapshots} (written by
  * {@code updateOpenMarkets} whenever a tracked market moves); a synthetic

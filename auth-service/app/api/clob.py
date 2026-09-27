@@ -1,6 +1,6 @@
 """``POST /auth/verify-and-derive`` — relay a ClobAuth message, return L2 creds.
 
-Deprecated/frozen — see repo-root CLAUDE.md's Polymarket API policy. Do not extend.
+Deprecated/frozen. Do not extend.
 """
 
 from __future__ import annotations

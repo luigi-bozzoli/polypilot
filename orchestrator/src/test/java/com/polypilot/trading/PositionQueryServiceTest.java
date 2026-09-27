@@ -19,8 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 /**
- * Unit test on the service directly (no Spring context) — see {@code OrderQueryServiceTest} /
- * {@code orchestrator/CLAUDE.md}'s Tests section for the convention this mirrors.
+ * Unit test on the service directly (no Spring context) — see {@code OrderQueryServiceTest}'s Tests section for the convention this mirrors.
  */
 class PositionQueryServiceTest {
 

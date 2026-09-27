@@ -6,9 +6,8 @@ import { ServiceStatusDot } from './ServiceStatusDot'
 
 /**
  * Infrastructure status — Postgres, Redis, RabbitMQ on the `polypilot-net`
- * bridge network (mock `21-health.html`, "Infrastructure" section).
- * Backed by GET /api/health/infrastructure — see
- * /contracts/health-infrastructure.md.
+ * bridge network.
+ * Backed by GET /api/health/infrastructure.
  */
 const FALLBACK_NAMES = ['Postgres 16', 'Redis 7', 'RabbitMQ 3']
 

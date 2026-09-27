@@ -7,7 +7,7 @@ import { ServiceStatusDot } from './ServiceStatusDot'
 /**
  * Deploy / schema checks (mock `21-health.html`, "Checks" section): actuator
  * health, SQL init status, JPA validate-mode table count. Backed by
- * GET /api/health/checks — see /contracts/health-checks.md.
+ * GET /api/health/checks.
  */
 const FALLBACK_NAMES = ['/actuator/health', 'spring.sql.init', 'JPA validate']
 

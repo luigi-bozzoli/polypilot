@@ -6,7 +6,7 @@ import lombok.Value;
 import java.util.Map;
 
 /**
- * Body of the aggregate {@code GET /health} (see {@code contracts/health-service-metrics.md}):
+ * Body of the aggregate {@code GET /health}:
  * the orchestrator's own status and metrics, plus a fanned-out probe of each
  * downstream Python service.
  *

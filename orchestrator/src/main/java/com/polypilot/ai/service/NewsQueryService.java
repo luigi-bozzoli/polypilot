@@ -14,8 +14,7 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * Read-side query backing {@code GET /market/{marketId}/news/latest}. Contract:
- * {@code contracts/market-news-summary.md}. Pure fan-in over
+ * Read-side query backing {@code GET /market/{marketId}/news/latest}. Pure fan-in over
  * {@link NewsSummaryRepository} — no writes (those happen in
  * {@code AiSignalListener}).
  */

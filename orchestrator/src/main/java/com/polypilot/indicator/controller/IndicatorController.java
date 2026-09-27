@@ -10,10 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * Read-only technical-indicator catalog. Public path is {@code /api/indicators};
- * the dashboard's Vite proxy strips the {@code /api} prefix, same as the
- * market/schedule controllers. Behind the default auth filter — any valid token.
- * Contract: {@code contracts/indicator-catalog.md}.
+ * Read-only technical-indicator catalog.
  */
 @RestController
 @RequestMapping("/indicators")

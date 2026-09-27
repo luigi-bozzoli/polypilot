@@ -5,7 +5,7 @@ endpoint (``/auth/api-key``) and returns the derived L2 API credentials.
 Polymarket verifies the signature itself; this service holds no private key for
 this flow.
 
-Deprecated/frozen — see repo-root CLAUDE.md's Polymarket API policy. Do not
+Deprecated/frozen. Do not
 extend, add new callers, or build functionality on top of the credentials this
 derives.
 """

@@ -12,8 +12,7 @@ export function fetchAuditLogs(size = 20): Promise<AuditLogPage> {
 }
 
 /**
- * Market-scoped slice of the audit feed, newest first. Contract:
- * `contracts/market-engine-decisions.md`. Backed by `GET /market/{marketId}/decisions`.
+ * Market-scoped slice of the audit feed, newest first. Backed by `GET /market/{marketId}/decisions`.
  */
 export function fetchMarketDecisions(marketId: string, limit = 20): Promise<MarketDecisionsResponse> {
   const qs = new URLSearchParams({ limit: String(limit) })

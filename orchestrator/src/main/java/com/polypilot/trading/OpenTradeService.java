@@ -23,14 +23,13 @@ import java.time.OffsetDateTime;
 import java.util.Optional;
 
 /**
- * Opens a simulated (dry-run) trade when a strategy's rule tree evaluates to {@code true}. See
- * {@code docs/open_trades.md} for the full design: one {@link Order} row (always an instant,
+ * Opens a simulated (dry-run) trade when a strategy's rule tree evaluates to {@code true}. One {@link Order} row (always an instant,
  * fully-filled simulated fill — {@code order_type} is not modeled) and one upserted {@link
  * Position} row per successful attempt, or an {@code ORDER_SKIPPED} result with no rows written
  * when a pre-flight check fails.
  *
- * <p>Deliberately has no {@code @Transactional} of its own: per {@code docs/open_trades.md} §8.1,
- * the order insert, position upsert, and the caller's audit-log write must commit or roll back
+ * <p>Deliberately has no {@code @Transactional} of its own: 
+ * The order insert, position upsert, and the caller's audit-log write must commit or roll back
  * together as one unit, so this runs inside whatever transaction the caller ({@code
  * StrategyService.runEvaluation}, {@code REQUIRES_NEW}) already has open.
  */

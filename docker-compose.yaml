@@ -62,7 +62,7 @@ services:
     ports:
       - "8001:8001"
     environment:
-      # Deprecated/frozen — see repo CLAUDE.md (Polymarket API policy). Nothing reads
+      # Deprecated/frozen. Nothing reads
       # this today; leave blank unless you're deliberately testing the frozen ClobAuth relay.
       POLYMARKET_PRIVATE_KEY: ${POLYMARKET_PRIVATE_KEY}
       POLYMARKET_CLOB_URL: ${POLYMARKET_CLOB_URL}

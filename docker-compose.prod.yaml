@@ -2,8 +2,7 @@ name: polypilot
 
 # Production-like compose: builds every service's `prod` Dockerfile target (no bind
 # mounts, no hot reload), keeps the same depends_on/service_healthy ordering as
-# docker-compose.yaml (rabbitmq's queue declaration ordering matters — see root
-# CLAUDE.md's async-boundary notes), and publishes only the dashboard. Postgres,
+# docker-compose.yaml (rabbitmq's queue declaration ordering matterss), and publishes only the dashboard. Postgres,
 # Redis, RabbitMQ (including its management UI) and all three backend services are
 # reachable only on the internal polypilot-net bridge network.
 #
@@ -67,7 +66,7 @@ services:
       target: prod
     restart: unless-stopped
     environment:
-      # Deprecated/frozen — see repo CLAUDE.md (Polymarket API policy). Nothing reads
+      # Deprecated/frozen. Nothing reads
       # this today; leave blank unless you're deliberately testing the frozen ClobAuth relay.
       POLYMARKET_PRIVATE_KEY: ${POLYMARKET_PRIVATE_KEY}
       POLYMARKET_CLOB_URL: ${POLYMARKET_CLOB_URL}

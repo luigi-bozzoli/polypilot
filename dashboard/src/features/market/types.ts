@@ -33,7 +33,7 @@ export type MarketPriceHistory = {
 /* (Binance, via the series' linked ticker — unrelated to marketId)    */
 /* ------------------------------------------------------------------ */
 
-/** One candle, oldest-first. Contract: contracts/market-ohlc.md. */
+/** One candle, oldest-first.*/
 export type OhlcCandle = {
   /** Candle open instant, ISO-8601 UTC. */
   openTime: string

@@ -13,8 +13,7 @@ import java.util.List;
 
 /**
  * Static-per-deploy checks surfaced on the health dashboard: Actuator health,
- * SQL init, and the JPA validate-mode table count. Contract:
- * {@code contracts/health-checks.md}.
+ * SQL init, and the JPA validate-mode table count.
  */
 @Slf4j
 @Service

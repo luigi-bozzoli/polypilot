@@ -26,8 +26,7 @@ import {
  * Renders the market's UP-outcome probability (points[].upPrice × 100, in ¢) as
  * a TradingView Lightweight Charts area series, fed by
  * `GET /api/market/:id/price-history` via `useMarketPriceHistory`. A segmented
- * control switches the look-back window; `null` upPrice breaks the line (gap),
- * per `contracts/market-price-history.md`.
+ * control switches the look-back window; `null` upPrice breaks the line (gap).
  *
  * Lightweight Charts is Apache-2.0 and requires a visible TradingView
  * attribution — the link below the chart card satisfies that (its own
@@ -205,11 +204,10 @@ export function MarketPriceHistoryChart({ marketId }: { marketId: string }) {
               type="button"
               onClick={() => setWindow(w)}
               aria-pressed={w === window}
-              className={`rounded border px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-wider transition-colors ${
-                w === window
+              className={`rounded border px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-wider transition-colors ${w === window
                   ? 'border-accent-border bg-accent-dim text-accent'
                   : 'border-border bg-bg2 text-text-muted hover:text-text-secondary'
-              }`}
+                }`}
             >
               {w}
             </button>

@@ -31,8 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 /**
  * Exercises {@link SecurityConfig}'s real {@code authorizeHttpRequests} rules end to end —
- * unlike the rest of the suite's {@code MockMvcBuilders.standaloneSetup(...)} pattern (see
- * orchestrator/CLAUDE.md), which only wires {@link JwtFilter} directly and never touches the
+ * unlike the rest of the suite's {@code MockMvcBuilders.standaloneSetup(...)} pattern, which only wires {@link JwtFilter} directly and never touches the
  * actual authorization decision. That's the one thing this test needs to prove: GET
  * /api/auth/me requires a valid JWT while login/SIWE stay public, so a real
  * {@code SecurityFilterChain} bean is unavoidable — hence {@code @WebMvcTest} +

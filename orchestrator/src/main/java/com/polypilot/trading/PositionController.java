@@ -15,7 +15,7 @@ import java.util.UUID;
  * Read-only positions endpoint. Public path is {@code /api/positions}; the dashboard's Vite proxy
  * strips the {@code /api} prefix, same as the market/strategy controllers. Every row is currently
  * a simulated dry-run position (no {@code POLYPILOT_LIVE_MODE} exists yet) — see {@code
- * OpenTradeService}/{@code docs/open_trades.md}.
+ * OpenTradeService}.
  */
 @RestController
 @RequestMapping("/positions")

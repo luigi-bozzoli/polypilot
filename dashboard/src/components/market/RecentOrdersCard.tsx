@@ -10,8 +10,7 @@ import { formatPriceCents } from '../../features/series/format'
  * "Recent orders on this market" (mock `13-market-detail.html`). Backed by
  * `GET /api/market/{marketId}/orders` — the market-scoped slice of `orders`, newest
  * first. Mirrors `StrategyRecentOrdersCard` (its "Market" column becomes "Strategy"
- * here, linking to the strategy that placed the order). Contract:
- * `contracts/market-recent-orders.md`.
+ * here, linking to the strategy that placed the order).
  */
 const COLUMNS = ['Time', 'Strategy', 'Side', 'Req / Filled', 'Price', 'Status'] as const
 

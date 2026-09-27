@@ -24,7 +24,7 @@ import java.util.List;
 
 /**
  * Read-side query for a market's OHLC candlestick chart, backing the dashboard's Market
- * Details page. Contract: {@code contracts/market-ohlc.md}.
+ * Details page.
  *
  * <p>Unlike {@link MarketPriceHistoryService} (which reads {@code price_snapshots}, keyed by
  * {@code market_id}), the candle data here lives in {@code ohlc_candles}, keyed by

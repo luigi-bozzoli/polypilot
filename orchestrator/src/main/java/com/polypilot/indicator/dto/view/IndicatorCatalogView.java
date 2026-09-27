@@ -7,10 +7,6 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-/**
- * Full technical-indicator catalog in one payload — the response of
- * {@code GET /api/indicators}. Contract: {@code contracts/indicator-catalog.md}.
- */
 @Data
 @Builder
 @NoArgsConstructor

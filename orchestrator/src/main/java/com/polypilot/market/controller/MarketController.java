@@ -70,7 +70,6 @@ public class MarketController {
      * Probability / price history for one market, oldest-first, backing the
      * dashboard chart. {@code window} is a look-back hint (12h, 24h, 7d, …);
      * the server may clamp it and echoes the effective value.
-     * Contract: {@code contracts/market-price-history.md}.
      */
     @GetMapping("/{marketId}/price-history")
     public MarketPriceHistoryView getPriceHistory(
@@ -84,7 +83,6 @@ public class MarketController {
      * oldest-first, backing the dashboard's candlestick chart. {@code timeframe} defaults to
      * "1h" if omitted; an explicit unknown/disabled code is rejected. {@code symbol} in the
      * response is null when the series has no linked asset — a normal, non-error state.
-     * Contract: {@code contracts/market-ohlc.md}.
      */
     @GetMapping("/{marketId}/ohlc")
     public MarketOhlcView getOhlc(
@@ -95,8 +93,7 @@ public class MarketController {
     }
 
     /**
-     * Market-scoped slice of the audit feed, newest first. Contract:
-     * {@code contracts/market-engine-decisions.md}.
+     * Market-scoped slice of the audit feed, newest first. 
      */
     @GetMapping("/{marketId}/decisions")
     public MarketDecisionsView getDecisions(
@@ -107,8 +104,7 @@ public class MarketController {
     }
 
     /**
-     * Market-scoped slice of {@code orders}, newest first. Contract:
-     * {@code contracts/market-recent-orders.md}.
+     * Market-scoped slice of {@code orders}, newest first. 
      */
     @GetMapping("/{marketId}/orders")
     public MarketOrdersView getOrders(
@@ -119,7 +115,7 @@ public class MarketController {
     }
 
     /**
-     * Latest non-expired news summary. Contract: {@code contracts/market-news-summary.md}.
+     * Latest non-expired news summary.
      * {@code news_summaries} is market-scoped, not user-scoped (same as price history) —
      * no {@code @AuthenticationPrincipal} needed.
      */
@@ -131,8 +127,7 @@ public class MarketController {
     }
 
     /**
-     * Latest sentiment score, any age (no expiry concept for sentiment). Contract:
-     * {@code contracts/market-sentiment.md}.
+     * Latest sentiment score, any age (no expiry concept for sentiment).
      */
     @GetMapping("/{marketId}/sentiment/latest")
     public ResponseEntity<MarketSentimentView> getLatestSentiment(@PathVariable("marketId") String marketId) {

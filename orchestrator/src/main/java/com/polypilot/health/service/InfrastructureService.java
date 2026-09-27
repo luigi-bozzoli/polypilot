@@ -18,8 +18,7 @@ import java.util.List;
 /**
  * Heavier infra probes for the health dashboard — Postgres, Redis, RabbitMQ on
  * the {@code polypilot-net} bridge network. Each probe degrades on its own:
- * one component being unreachable never fails the others. Contract:
- * {@code contracts/health-infrastructure.md}.
+ * one component being unreachable never fails the others.
  */
 @Slf4j
 @Service

@@ -29,7 +29,7 @@ import static org.mockito.Mockito.when;
 
 /**
  * Unit test on the service directly (no Spring context), matching this codebase's convention —
- * see {@code AuditLogQueryServiceTest} / {@code orchestrator/CLAUDE.md}'s Tests section.
+ * see {@code AuditLogQueryServiceTest}'s Tests section.
  */
 class OrderQueryServiceTest {
 

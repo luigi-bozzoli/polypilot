@@ -4,16 +4,15 @@ import { ServiceStatusDot } from './ServiceStatusDot'
 
 type ServiceCardProps = {
   name: string
-  /** Deployment port from the repo-root CLAUDE.md services table — static, not fetched. */
+  /** Deployment port from the repo-root — static, not fetched. */
   port: number
   /** The service's own health payload, or undefined while loading. */
-  data: { status: string; metrics?: ServiceMetrics; [key: string]: unknown } | undefined
+  data: { status: string; metrics?: ServiceMetrics;[key: string]: unknown } | undefined
 }
 
 /**
  * One service card (mock `.svc`). Status dot, metrics row (uptime / latency /
- * detail) and the raw JSON block all come straight from GET /api/health — see
- * /contracts/health-service-metrics.md.
+ * detail) and the raw JSON block all come straight from GET /api/health.
  */
 export function ServiceCard({ name, port, data }: ServiceCardProps) {
   const tone = toneForStatus(data?.status)

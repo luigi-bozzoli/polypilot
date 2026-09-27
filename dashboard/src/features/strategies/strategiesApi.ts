@@ -58,7 +58,7 @@ export function setStrategyEnabled(id: string, enabled: boolean): Promise<Strate
 /**
  * GET /strategies/{id}/orders?limit=20. Strategy-scoped recent orders, newest first. An
  * unknown/unowned id yields an empty array, not a 404 — same as `fetchStrategy`'s sibling
- * `/decisions` endpoint. Contract: `contracts/strategy-recent-orders.md`.
+ * `/decisions` endpoint.
  */
 export function fetchStrategyOrders(id: string, limit = 20): Promise<StrategyOrderRow[]> {
   return authGet<StrategyOrderRow[]>(`/api/strategies/${id}/orders?limit=${limit}`)

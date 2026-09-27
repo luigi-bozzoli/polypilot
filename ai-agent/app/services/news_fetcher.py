@@ -1,7 +1,7 @@
 """GDELT DOC 2.0 news search — the sole configured news source.
 
 Free, unrestricted for commercial/redistribution use, no API key, updated
-about every 15 minutes (docs/news_sourcing.MD §1/§3). Returns article
+about every 15 minutes. Returns article
 *metadata* only (title/url/domain/seendate) — no full article text.
 """
 

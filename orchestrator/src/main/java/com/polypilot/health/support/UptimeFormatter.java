@@ -6,7 +6,7 @@ import java.time.Duration;
 
 /**
  * Formats a process uptime into the short, display-ready shape the health
- * dashboard expects (see {@code contracts/health-service-metrics.md}):
+ * dashboard expects:
  * {@code "3d 04h"} once past a day, {@code "4h 12m"} within a day,
  * {@code "3m 20s"} within an hour, {@code "12s"} below a minute.
  */

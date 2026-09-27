@@ -195,8 +195,8 @@ tests — all offline except the orchestrator's integration suite, which needs D
 
 ## Design notes
 
-- **Async boundary** (ADR-003): order/data-critical calls are synchronous HTTP; AI sentiment is
-  fire-and-forget over RabbitMQ. Keep new cross-service calls on the correct side of this split.
+- **Async boundary**: order/data-critical calls are synchronous HTTP; AI sentiment is
+  fire-and-forget over RabbitMQ. 
 - **ShedLock-guarded scheduling**: each strategy runs on its own cron trigger (not a shared sweep), leased via a
   DB-backed lock so a slow evaluation can't overlap its own next tick — and so the orchestrator stays safe to run
   as more than one instance later, even though it's single-instance only today.
@@ -208,14 +208,13 @@ tests — all offline except the orchestrator's integration suite, which needs D
 ## Known limitations
 
 - **Paper trading only.** No integration places, cancels, or reads real orders against Polymarket. The
-  `wallet/`/ClobAuth credential-derivation path exists in the code but is deprecated/frozen — it's described in
-  `orchestrator/CLAUDE.md` and `auth-service/CLAUDE.md`, not hidden, but must not be extended.
+  `wallet/`/ClobAuth credential-derivation path exists in the code but is deprecated/frozen.
 - **`POLYPILOT_LIVE_MODE`** is passed into the orchestrator container (hardcoded to `false`) but nothing in the
   code actually reads it yet — only the per-strategy `dry_run` flag is a real, enforced switch today.
 - **Simulated fills use cached prices**, not a live orderbook — reported strategy performance will look better
   than a real execution could achieve.
 - **SQL init runs on every boot** (`spring.sql.init.mode=always`) — idempotent (`ON CONFLICT DO NOTHING`), but
-  not a substitute for real migrations; Flyway is planned but not wired up yet.
+  not a substitute for real migrations.
 - **Single-instance scheduler assumptions.** ShedLock makes concurrent evaluation safe, but nothing else
   (in-memory `ThreadPoolTaskScheduler` state, `docker-compose.yaml` has no `deploy.replicas`) has been tested
   running more than one orchestrator instance.

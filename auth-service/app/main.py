@@ -3,7 +3,7 @@
 The **only** service allowed to touch private keys and raw wallet signatures.
 It does cryptographic verification only and never enforces SIWE / application
 policy — nonce, domain, expiry, chain id, user lookup and every authorization
-decision live in the orchestrator. See ``CLAUDE.md``.
+decision live in the orchestrator..
 """
 
 from __future__ import annotations

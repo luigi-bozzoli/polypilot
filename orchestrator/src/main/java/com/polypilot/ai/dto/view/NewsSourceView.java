@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/** One article backing a {@link MarketNewsSummaryView}. Contract: {@code contracts/market-news-summary.md}. */
+/** One article backing a {@link MarketNewsSummaryView}. */
 @Data
 @Builder
 @NoArgsConstructor
