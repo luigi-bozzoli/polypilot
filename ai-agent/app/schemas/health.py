@@ -1,5 +1,4 @@
-"""Health-check response models.
-"""
+"""Health-check response models."""
 
 from __future__ import annotations
 

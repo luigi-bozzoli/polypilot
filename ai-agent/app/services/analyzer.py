@@ -1,5 +1,4 @@
-"""Summarizer + sentiment scorer — one structured-output Claude call.
-"""
+"""Summarizer + sentiment scorer — one structured-output Claude call."""
 
 from __future__ import annotations
 
