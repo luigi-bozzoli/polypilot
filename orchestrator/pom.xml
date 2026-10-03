@@ -8,7 +8,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.1.0</version>
+        <version>4.1.1</version>
         <relativePath/>
     </parent>
 
@@ -38,8 +38,8 @@
         <tomcat.version>11.0.25</tomcat.version>
         <postgresql.version>42.7.12</postgresql.version>
         <mapstruct.version>1.6.3</mapstruct.version>
-        <jjwt.version>0.12.6</jjwt.version>
-        <ta4j.version>0.19</ta4j.version>
+        <jjwt.version>0.13.0</jjwt.version>
+        <ta4j.version>0.25.0</ta4j.version>
         <shedlock.version>6.6.0</shedlock.version>
     </properties>
 
