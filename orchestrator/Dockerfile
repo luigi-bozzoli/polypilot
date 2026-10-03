@@ -13,7 +13,7 @@ COPY src ./src
 RUN mvn package -DskipTests -B
 
 # ── Stage 2: dev runtime (docker-compose.yaml uses build.target: dev) ─────────
-FROM eclipse-temurin:21-jre-alpine AS dev
+FROM eclipse-temurin:25-jre-alpine AS dev
 
 WORKDIR /app
 
@@ -27,7 +27,7 @@ EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
 
 # ── Stage 3: prod runtime (docker-compose.prod.yaml uses build.target: prod) ──
-FROM eclipse-temurin:21-jre-alpine AS prod
+FROM eclipse-temurin:25-jre-alpine AS prod
 
 WORKDIR /app
 
