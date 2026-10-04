@@ -125,10 +125,10 @@ function lowerLeafBase(leaf: LeafDraft, catalogs: ConditionCatalogs): RuleNode {
   const value: IndicatorNode['value'] =
     leaf.compareTo === 'INDICATOR' && leaf.compareIndicator
       ? {
-          indicatorKey: leaf.compareIndicator.indicatorKey,
-          params: coerceIndicatorParams(leaf.compareIndicator.indicatorKey, catalogs.indicators, leaf.compareIndicator.params),
-          outputField: leaf.compareIndicator.outputField,
-        }
+        indicatorKey: leaf.compareIndicator.indicatorKey,
+        params: coerceIndicatorParams(leaf.compareIndicator.indicatorKey, catalogs.indicators, leaf.compareIndicator.params),
+        outputField: leaf.compareIndicator.outputField,
+      }
       : coerceNumericValue(leaf.value)
   return {
     type: 'INDICATOR',
@@ -193,16 +193,7 @@ function describeComparisonTarget(target: IndicatorComparisonTarget, catalogs: C
   return `${indicator?.abbreviation ?? target.indicatorKey}(${paramSummary}).${target.outputField}`
 }
 
-/**
- * A group's `operators` connect adjacent `children` pairwise with no operator precedence —
- * `[A, B, C]` joined by `[OR, AND]` evaluates left-to-right as `(A OR B) AND C`. Displaying
- * that flat as `A OR B AND C` reads (by conventional precedence) as `A OR (B AND C)`, which is
- * wrong. This rewrites the flat pair into the same shape an explicit nested `GroupDraft` would
- * have — a run of same-operator children stays flat, but each point where the operator changes
- * gets a synthetic sub-group boundary — so `describeCondition`'s existing group parenthesization
- * renders the real evaluation order. A uniform-operator group (all `AND`, all `OR`, etc.) round-trips
- * unchanged, since no boundary is ever needed there.
- */
+
 function restructureGroup(children: ConditionDraft[], operators: BooleanOperator[]): { children: ConditionDraft[]; operators: BooleanOperator[] } {
   if (operators.length === 0) return { children, operators }
 
