@@ -194,9 +194,48 @@ function describeComparisonTarget(target: IndicatorComparisonTarget, catalogs: C
 }
 
 /**
+ * A group's `operators` connect adjacent `children` pairwise with no operator precedence —
+ * `[A, B, C]` joined by `[OR, AND]` evaluates left-to-right as `(A OR B) AND C`. Displaying
+ * that flat as `A OR B AND C` reads (by conventional precedence) as `A OR (B AND C)`, which is
+ * wrong. This rewrites the flat pair into the same shape an explicit nested `GroupDraft` would
+ * have — a run of same-operator children stays flat, but each point where the operator changes
+ * gets a synthetic sub-group boundary — so `describeCondition`'s existing group parenthesization
+ * renders the real evaluation order. A uniform-operator group (all `AND`, all `OR`, etc.) round-trips
+ * unchanged, since no boundary is ever needed there.
+ */
+function restructureGroup(children: ConditionDraft[], operators: BooleanOperator[]): { children: ConditionDraft[]; operators: BooleanOperator[] } {
+  if (operators.length === 0) return { children, operators }
+
+  let accOp = operators[0]
+  let runChildren: ConditionDraft[] = [children[0]]
+  let runOperators: BooleanOperator[] = []
+
+  const flushRun = (): ConditionDraft =>
+    runChildren.length === 1
+      ? runChildren[0]
+      : { kind: 'GROUP', id: 'operator-run', negate: false, children: runChildren, operators: runOperators }
+
+  for (let i = 0; i < operators.length; i++) {
+    const op = operators[i]
+    if (op !== accOp) {
+      const run = flushRun()
+      runChildren = [run]
+      runOperators = []
+      accOp = op
+    }
+    runChildren.push(children[i + 1])
+    runOperators.push(op)
+  }
+
+  const result = flushRun()
+  return result.kind === 'GROUP' ? { children: result.children, operators: result.operators } : { children: [result], operators: [] }
+}
+
+/**
  * Renders one condition (leaf or group) as one or more indented lines, its own `NOT` prefix
- * applied first. Groups render as a parenthesized block containing their children, each
- * preceded by its connecting operator (`group.operators[i - 1]`) except the first.
+ * applied first. Groups render as a parenthesized block containing their children (after
+ * `restructureGroup` inserts any operator-change boundaries), each preceded by its connecting
+ * operator except the first.
  */
 function describeCondition(cond: ConditionDraft, catalogs: ConditionCatalogs, depth: number): string[] {
   const indent = '  '.repeat(depth)
@@ -208,13 +247,15 @@ function describeCondition(cond: ConditionDraft, catalogs: ConditionCatalogs, de
 
   if (cond.children.length === 0) return [`${indent}${negatePrefix}()`]
 
+  const { children, operators } = restructureGroup(cond.children, cond.operators)
+
   const inner: string[] = []
-  cond.children.forEach((child, i) => {
+  children.forEach((child, i) => {
     const [first, ...rest] = describeCondition(child, catalogs, depth + 1)
     if (i === 0) {
       inner.push(first, ...rest)
     } else {
-      inner.push(`${'  '.repeat(depth + 1)}${cond.operators[i - 1]} ${first.trimStart()}`, ...rest)
+      inner.push(`${'  '.repeat(depth + 1)}${operators[i - 1]} ${first.trimStart()}`, ...rest)
     }
   })
 
@@ -224,14 +265,17 @@ function describeCondition(cond: ConditionDraft, catalogs: ConditionCatalogs, de
 /**
  * Flattens the root group's children into preview lines: `IF` prefixes the first, each
  * subsequent condition is prefixed by its connecting operator, and every condition carries
- * its own `NOT`/parenthesization via `describeCondition`.
+ * its own `NOT`/parenthesization via `describeCondition`. The root's own mixed-operator
+ * boundaries go through `restructureGroup` just like any nested group's, so e.g. `A OR B AND C`
+ * previews as `IF (A OR B) AND C`.
  */
 export function formatConditionTree(root: GroupDraft, catalogs: ConditionCatalogs): string[] {
   const lines: string[] = []
+  const { children, operators } = restructureGroup(root.children, root.operators)
 
-  root.children.forEach((child, i) => {
+  children.forEach((child, i) => {
     const [first, ...rest] = describeCondition(child, catalogs, 0)
-    const prefix = i === 0 ? 'IF' : root.operators[i - 1]
+    const prefix = i === 0 ? 'IF' : operators[i - 1]
     lines.push(`${prefix} ${first.trimStart()}`, ...rest)
   })
 
